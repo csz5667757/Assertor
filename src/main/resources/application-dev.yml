@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+#数据库配置
+spring:
+  datasource:
+    hikari:
+      connection-test-query: SELECT 1
+      minimum-idle: 1
+      maximum-pool-size: 5
+      pool-name: dbcp1
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ssm?useUnicode=true&useSSL=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: 123456
+    type: com.zaxxer.hikari.HikariDataSource
+
+#日志信息
+logging:
+  level:
+    org.springframework.web: trace
+
+mybatis-plus:
+  global-config:
+    refresh-mapper: false
+

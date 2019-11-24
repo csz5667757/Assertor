@@ -1,0 +1,26 @@
+#spring boot配置
+spring:
+  application:
+    name: assertor
+  profiles:
+    active: dev
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  typeAliasesPackage: com.csz.assertor.sys.entity
+  global-config:
+    #逻辑删除配置
+    logic-delete-value: 1
+    logic-not-delete-value: 0
+  #自定义SQL注入器
+    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+  #自定义填充字段实现
+    meta-object-handler: com.csz.assertor.mybatis.FillDataTimeHandler
+
+server:
+  tomcat:
+    uri-encoding: utf-8

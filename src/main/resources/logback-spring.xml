@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 从高到地低 OFF 、 FATAL 、 ERROR 、 WARN 、 INFO 、 DEBUG 、 TRACE 、 ALL -->
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+    <!-- 日志文件名称 -->
+    <property name="LOG_FILE" value="${BUILD_FOLDER:-build}/${springAppName}"/>​
+
+    <!-- 日志输出格式 -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
+
+    <!-- 日志最大的历史 15天 -->
+    <property name="MAX_HISTORY" value="15"/>
+
+    <!-- spring-boot 开发环境控制台输出 -->
+    <springProfile name="dev, test, prod">
+        <logger name="com.csz.assertor.sys.mapper" level="DEBUG" />
+
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <!-- 对日志进行格式化 -->
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>${CONSOLE_LOG_CHARSET}</charset>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+    <!-- spring-boot 测试,生产环境生成日志文件 -->
+    <springProfile name="test, prod, dev">
+        <!-- ERROR级别日志, 记录程序中异常的日志信息 -->
+        <appender name="LOG_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>ERROR</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_FILE}.error.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <maxHistory>${MAX_HISTORY}</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>${CONSOLE_LOG_CHARSET}</charset>
+            </encoder>
+        </appender>
+
+        <!-- WARN级别日志, 记录Http请求与响应的日志信息 -->
+        <appender name="LOG_VISIT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>WARN</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_FILE}.visit.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <maxHistory>${MAX_HISTORY}</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>${CONSOLE_LOG_CHARSET}</charset>
+            </encoder>
+        </appender>
+
+        <!-- INFO级别日志, 记录程序中打点的日志信息 -->
+        <appender name="LOG_MONITOR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>INFO</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_FILE}.monitor.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <maxHistory>${MAX_HISTORY}</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>${CONSOLE_LOG_CHARSET}</charset>
+            </encoder>
+        </appender>
+
+        <!-- root级别   DEBUG -->
+        <root level="INFO">
+            <!-- 文件输出 -->
+            <appender-ref ref="LOG_ERROR" />
+            <appender-ref ref="LOG_VISIT" />
+            <appender-ref ref="LOG_MONITOR" />
+        </root>
+    </springProfile>
+</configuration>
