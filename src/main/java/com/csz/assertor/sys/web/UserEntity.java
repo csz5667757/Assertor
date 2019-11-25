@@ -11,11 +11,7 @@ import com.csz.assertor.sys.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,7 +36,7 @@ public class UserEntity {
 //        return new Response<>(ResultEnum.SUCCESS,users);
 //    }
 
-    @RequestMapping("allUser")
+    @GetMapping("allUser")
     @ApiOperation("查询所有用户")
     public Response<List> UserSelect(){
         EntityWrapper<User> wrapper = new EntityWrapper<>();
@@ -48,7 +44,7 @@ public class UserEntity {
         return  ResultGenerator.ok(users);
     }
 
-    @RequestMapping("updateUser")
+    @GetMapping("updateUser")
     @ApiOperation("更新用户")
     public Response UpdateUser(){
         User user = new User();
@@ -58,7 +54,7 @@ public class UserEntity {
         return ResultGenerator.ok();
     }
 
-    @RequestMapping("addUser")
+    @GetMapping("addUser")
     @ApiOperation("添加用户")
     public Response addUser(){
         User user =new User();
@@ -71,7 +67,7 @@ public class UserEntity {
         return ResultGenerator.ok();
     }
 
-    @RequestMapping("FiveUser")
+    @PostMapping("FiveUser")
     @ApiOperation("分页查询")
     public Response FiveUser(@RequestBody QueryRequest request){
         Page<User> page = new Page<>(request.getCurrent(),request.getSize());

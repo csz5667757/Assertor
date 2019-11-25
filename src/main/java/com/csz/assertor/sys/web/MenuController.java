@@ -7,6 +7,7 @@ import com.csz.assertor.rest.response.Response;
 import com.csz.assertor.sys.entity.Menu;
 import com.csz.assertor.sys.service.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +29,7 @@ public class MenuController {
     @Autowired
     private IMenuService iMenuService;
 
-    @RequestMapping("addMenu")
+    @GetMapping("addMenu")
     public Response addMenu(){
         Menu menu =new Menu();
         menu.setCreateTime(new Date());
@@ -42,7 +43,7 @@ public class MenuController {
         return ResultGenerator.ok();
     }
 
-    @RequestMapping("deleteMenu")
+    @GetMapping("deleteMenu")
     public Response deleteMenu(){
         Menu menu =  new Menu();
         menu.setId(11);
@@ -50,7 +51,7 @@ public class MenuController {
         return ResultGenerator.ok();
     }
 
-    @RequestMapping("SelectAll")
+    @GetMapping("SelectAll")
     public Response<List> selectAll(){
         EntityWrapper<Menu> wrapper = new EntityWrapper<>();
         List<Menu> menuList = iMenuService.selectList(wrapper);
