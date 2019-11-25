@@ -27,6 +27,8 @@
 		<fastjson.version>1.2.47</fastjson.version>
 		<hutool.version>4.1.1</hutool.version>
 		<lombok.version>1.18.10</lombok.version>
+		<swagger2.version>2.9.2</swagger2.version>
+		<swagger2-ui.version>1.8.9</swagger2-ui.version>
 	</properties>
 
 	<dependencies>
@@ -119,6 +121,38 @@
 			<groupId>com.ibeetl</groupId>
 			<artifactId>beetl-framework-starter</artifactId>
 			<version>1.2.10.RELEASE</version>
+		</dependency>
+
+		<!-- swagger2 api文档依赖 -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>${swagger2.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>io.swagger</groupId>
+					<artifactId>swagger-annotations</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>io.swagger</groupId>
+					<artifactId>swagger-models</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>1.5.21</version>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-models</artifactId>
+			<version>1.5.21</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.xiaoymin</groupId>
+			<artifactId>swagger-bootstrap-ui</artifactId>
+			<version>${swagger2-ui.version}</version>
 		</dependency>
 	</dependencies>
 
