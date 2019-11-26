@@ -16,5 +16,7 @@ public class AssertorApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(AssertorApplication.class, args);
 	}
+
+
 }
 

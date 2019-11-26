@@ -1,6 +1,8 @@
 package com.csz.assertor.configuration;
 
 import com.csz.assertor.HttpLoggingFilter;
+import com.ibeetl.starter.BeetlTemplateCustomize;
+import org.beetl.core.GroupTemplate;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +27,17 @@ public class AssertorConfigurer {
     }
 
     //beetl模板引擎
-//    @Bean
+    @Bean
+    public BeetlTemplateCustomize beetlTemplateCustomize(){
+        return new BeetlTemplateCustomize(){
+            public void customize(GroupTemplate groupTemplate){
+            }
+        };
+    }
+
+
+
+
 
 
 

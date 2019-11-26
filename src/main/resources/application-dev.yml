@@ -10,10 +10,12 @@ spring:
       maximum-pool-size: 5
       pool-name: dbcp1
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ssm?useUnicode=true&useSSL=true&characterEncoding=utf8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/matou?useUnicode=true&useSSL=true&characterEncoding=utf8&serverTimezone=UTC
     username: root
     password: 123456
     type: com.zaxxer.hikari.HikariDataSource
+  thymeleaf:
+    cache: false
 
 #日志信息
 logging:
@@ -23,4 +25,11 @@ logging:
 mybatis-plus:
   global-config:
     refresh-mapper: false
+
+
+
+
+
+
+
 

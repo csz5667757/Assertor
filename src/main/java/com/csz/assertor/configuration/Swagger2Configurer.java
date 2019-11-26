@@ -27,7 +27,10 @@ public class Swagger2Configurer implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry){
         registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-        registry.addResourceHandler("static/**").addResourceLocations("classpath:/resources/");
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/static/layui/**").addResourceLocations("classpath:/static/layui/");
+        registry.addResourceHandler("/static/**/**").addResourceLocations("classpath:/static/css/");
+
     }
 
     @Bean
