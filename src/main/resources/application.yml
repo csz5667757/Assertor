@@ -24,3 +24,11 @@ mybatis-plus:
 server:
   tomcat:
     uri-encoding: utf-8
+
+
+##热部署生效
+#  spring.devtools.restart.enabled=true
+#  #设置重启的目录,添加那个目录的文件需要restart
+#  spring.devtools.restart.additional-paths=src/main/java
+#
+#  spring.devtools.restart.exclude=WEB-INF/**

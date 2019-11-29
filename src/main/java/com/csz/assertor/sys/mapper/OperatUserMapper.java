@@ -14,5 +14,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface OperatUserMapper extends BaseMapper<OperatUser> {
-    public OperatUser SelectByUserName(String username);
+    OperatUser SelectByUserName(String username);
 }

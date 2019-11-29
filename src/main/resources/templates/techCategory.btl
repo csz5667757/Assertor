@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>码头题库运营平台</title>
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css">
+    <script src="https://www.layuicdn.com/layui/layui.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">码头题库运营平台</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">控制台</a></li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    ${nickname}
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">用户管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/user?nickname=${nickname}">用户喜好管理</a></dd>
+                        <dd><a href="javascript:;">错题管理</a></dd>
+                        <dd><a href="javascript:;">收藏管理</a></dd>
+                        <dd><a href="javascript:;">反馈查看</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">类目管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">首次登录类目管理</a></dd>
+                        <dd><a href="javascript:;">推荐类目管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">题目管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/sys/questions/page?nickname=${nickname}">题目管理</a></dd>
+                        <dd><a href="javascript:;">推荐题库管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="">套题管理</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <table id="demo" lay-filter="demo"></table>
+    </div>
+
+    <script type="text/html" id="barDemo">
+      <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+      <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="add">新增首页类目</button>
+        </div>
+    </script>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+
+
+<script>
+    layui.use(['table', 'element', 'layer'], function () {
+        var element = layui.element;
+        var table = layui.table;
+        var $ = layui.jquery, layer = layui.layer;
+
+        table.render({
+            elem: '#demo'
+            , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , url: '/sys/tech/all/' //数据接口
+            , request: {
+                pageName: 'current',
+                limitName: 'size'
+            }
+            , parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.data.total, //解析数据长度
+                    "data": res.data.records //解析数据列表
+                };
+            }
+            , page: true //开启分页
+            , cols: [[ //表头
+                {field: 'id', title: '序号', width: 200, sort: true}
+                , {field: 'name', title: '类型', width: 400}
+                , {fixed: 'right', width: 178, align: 'center', toolbar: '#barDemo'}
+            ]]
+        });
+
+
+        //监听工具条
+        table.on('tool(demo)', function (obj) {
+        console.log(obj);
+            var data = obj.data;
+            if (obj.event === 'detail') {
+                layer.msg('ID：' + data.id + ' 的查看操作');
+            } else if (obj.event === 'del') {
+                layer.confirm('真的删除"' + data.name + '"么', function (index) {
+                    $.ajax({
+                        conentType: "json/application,charset=utf-8"
+                        , url: "/sys/tech/delete?nickname=${nickname}"
+                        , dataType: "json"
+                        , type: "POST"
+                        , data: {
+                            id: data.id
+                        }
+                    })
+                    // obj.del();
+                    layer.close(index);
+                    table.reload("demo");
+                });
+            } else if (obj.event === 'edit') {
+                layer.open({
+                    title: "编辑菜单"
+                    , btnAlign: 'c' //按钮居中
+                    , shade: 0//不显示遮罩
+                    , btn: null
+                    , area: '500px;'
+                    , content: "<form class='layui-form' action='/sys/tech/update?nickname=${nickname}' method='post'>" +
+                        "<div class='layui-form-item'>" +
+                        "<label  class='layui-form-label' >序号：</label>" + "<div class='layui-input-block'>" +
+                        "<input class='layui-input' name='id' readonly " + "value=" + JSON.stringify(data.id) + "></div></div>" +
+
+                        "<div class='layui-form-item'>" +
+                        "<label class='layui-form-label' style=''>类目：</label>" + "<div class='layui-input-block'>" +
+                        "<input name='category' type='text' class='layui-input' required " + "value=" + JSON.stringify(data.name) + "></div></div>" +
+
+                        "<button class='layui-btn layui-btn-primary'  type='submit' style='margin-top: 10px;: 20px; margin-left:200px'>提交</button>" +
+                        "</form>"
+                    , success: function (layero, index) {
+                        console.log(layero);
+                    }
+                })
+            }
+            //头工具栏事件
+            table.on('toolbar(demo)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
+                switch (obj.event) {
+                    case 'add':
+                        layer.open({
+                            title: "添加用户"
+                            , btnAlign: 'c' //按钮居中
+                            , shade: 0//不显示遮罩
+                            , btn:null
+                            , area: '500px;'
+                            , content: "<form class='layui-form' action='/sys/tech/add?nickname=${nickname}' method='post'>" +
+                                "<div class='layui-form-item'>" +
+                                "<label  class='layui-form-label' >类目：</label>" + "<div class='layui-input-block'>" +
+                                "<input class='layui-input' name='category' required></div></div>" +
+
+                                "<button class='layui-btn layui-btn-primary'  type='submit' style='margin-top: 10px;: 20px; margin-left:200px'>提交</button>" +
+                                "</form>"
+                        })
+                        break;
+                }
+                ;
+            });
+
+            //触发事件
+            var active = {
+                setTop: function () {
+                    var that = this;
+                }
+                , offset: function (othis) {
+                    var type = othis.data('type')
+                        , text = othis.text();
+                    layer.open({
+                        type: 1
+                        , offset: type
+                        , id: 'layerDemo' + type //防止重复弹出
+                        , content: '<div style="padding: 20px 20px">' + text + '</div>'
+                        , btn: '关闭全部'
+                        , btnAlign: 'c' //按钮居中
+                        , shade: 0
+                        , yes: function () {
+                            layer.closeAll();
+                        }
+                    });
+                }
+            };
+
+            $('#layer').on('click', function () {
+                var othis = $(this), method = othis.data('method');
+                active[method] ? active[method].call(this, othis) : '';
+            });
+        });
+    });
+</script>
+</body>
+</html>

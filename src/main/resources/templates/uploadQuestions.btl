@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <link rel="stylesheet" href="../../static/css/font.css">
+    <link rel="stylesheet" href="../../static/css/xadmin.css">
+    <script src="../../static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../static/js/xadmin.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<form class="layui-form" action="" lay-filter="news">
+    <div class="layui-fluid">
+        <div class="layui-row">
+            <div class="layui-form-item">
+                <label class="layui-form-label">专项</label>
+                <div class="layui-input-inline">
+                    <select name="industry_id" id="xm" lay-verify="required" lay-filter="xmFilter">
+                        <option value="">请选择</option>
+                        <option value="8">能源</option>
+                        <option value="9">原材料</option>
+                        <option value="10">工业</option>
+                        <option value="11">可选消费</option>
+                        <option value="12">主要消费</option>
+                        <option value="13">医药卫生</option>
+                        <option value="14">金融地产</option>
+                        <option value="15">信息技术</option>
+                        <option value="16">电信业务</option>
+                        <option value="17">公共事业</option>
+                    </select>
+                </div>
+
+                <label class="layui-form-label">公司英文名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="en_company_name" lay-verify="required" placeholder="请输入"
+                           readonly="true"  value=""
+                           autocomplete="off" class="layui-input">
+                </div>
+
+                <label class="layui-form-label">公司中文名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="cn_company_name" lay-verify="required" placeholder="请输入"
+                           value=""
+                           class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">其他名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="cn_other_names"  value="" placeholder="多个用，分隔" class="layui-input">
+                </div>
+
+                <label class="layui-form-label">股票代号</label>
+                <div class="layui-input-inline">
+                    <input type="text" lay-verify="required" name="stock_code"  value="" class="layui-input">
+                </div>
+
+                <label class="layui-form-label">股票名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" lay-verify="required" name="stock_name" value="" class="layui-input">
+                </div>
+            </div>
+
+
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="submit">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    flag = 0;
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form, layer = layui.layer, laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //自定义验证规则
+        form.verify({
+            title: function (value) {
+                if (value.length < 5) {
+                    return '标题至少得5个字符啊';
+                }
+            }
+            , pass: [
+                /^[\S]{6,12}$/
+                , '密码必须6到12位，且不能出现空格'
+            ]
+            , content: function (value) {
+                layedit.sync(editIndex);
+            }
+        });
+
+        //监听指定开关
+        form.on('switch(switchTest)', function (data) {
+            layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+                offset: '6px'
+            });
+            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+        });
+
+        // 监听提交
+        form.on('submit(submit)', function (data) {
+            // layer.alert(JSON.stringify(data.field), {
+            //     title: '最终的提交信息'
+            // });
+            layer.confirm('确定提交?', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: "/annotate/company/add",
+                    data: data.field,
+                    success: function (result) {
+                        layer.alert(result.msg, {title: '处理结果!'});
+                    }
+                });
+                layer.close(index);
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

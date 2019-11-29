@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.csz.assertor.sys.mapper.UserMapper">
-
+    <resultMap id="UserVO" type="com.csz.assertor.sys.Vo.UserVO">
+        <result column="is_skip" property="isSkip" jdbcType="INTEGER" />
+        <result column="openid" property="openid" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="getUser" resultMap="UserVO">
+        select  u.is_skip , u.openid , t.name from user u , tech_category t where u.tech_category_id = t.id
+    </select>
 </mapper>

@@ -1,7 +1,6 @@
 package com.csz.assertor.sys.entity;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.enums.IdType;
 import lombok.Data;
@@ -11,29 +10,23 @@ import lombok.Data;
  * 
  * </p>
  *
- * @author Assertor
- * @since 2019-11-24
+ * @author assertor
+ * @since 2019-11-27
  */
 @Data
-public class User extends BaseEntity<User> {
+public class User {
+
+    private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private static final long serialVersionUID = 1L;
+    private String openid;
 
-    private String name;
+    @TableField("tech_category_id")
+    private Integer techCategoryId;
 
-    private String address;
+    @TableField("is_skip")
+    private Integer isSkip;
 
-    private LocalDateTime useDate;
-
-    private String username;
-
-    private String password;
-
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
 }

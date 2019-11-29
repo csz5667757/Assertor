@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>码头题库运营平台</title>
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">码头题库运营平台</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">控制台</a></li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    ${nickname}
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">用户管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/user?nickname=${nickname}">用户喜好管理</a></dd>
+                        <dd><a href="javascript:;">错题管理</a></dd>
+                        <dd><a href="javascript:;">收藏管理</a></dd>
+                        <dd><a href="javascript:;">反馈查看</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">类目管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/category?nickname=${nickname}">首次登录类目管理</a></dd>
+                        <dd><a href="javascript:;">推荐类目管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">题目管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">题目管理</a></dd>
+                        <dd><a href="javascript:;">推荐题库管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="">套题管理</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body ">
+                            <form class="layui-form layui-col-space5" onsubmit="return false">
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <select name="categoryGroupId"  lay-search>
+                                        <option value="">直接选择或搜索选择</option>
+                                        <%
+                                        for(eg in egList){
+                                        %>
+                                        <option value="${eg.id}">${eg.title}</option>
+                                        <%
+                                        }
+                                        %>
+                                    </select>
+                                </div>
+
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <select name="exclusiveId"  lay-search>
+                                        <option value="">直接选择或搜索选择</option>
+                                        <%
+                                        for(e in eList){
+                                        %>
+                                        <option value="${e.id}">${e.exclusiveTitle}</option>
+                                        <%
+                                        }
+                                        %>
+                                    </select>
+                                </div>
+                                <div class="layui-inline layui-show-xs-block">
+                                    <button class="layui-btn-sm" lay-submit="" lay-filter="submit"><i
+                                            class="layui-icon">&#xe615;</i></button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table id="demo" lay-filter="demo"></table>
+    </div>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="add">上传题目</button>
+        </div>
+    </script>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<script src="https://www.layuicdn.com/layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use(['table', 'layedit', 'element', 'form'], function () {
+        var element = layui.element;
+        var table = layui.table;
+        var layedit = layui.layedit;
+        var form = layui.form;
+
+        form.on('submit(submit)', function(data){
+              table.reload('demo', {where: data.field});
+            return false;
+        });
+
+        table.render({
+            elem: '#demo'
+            , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , url: '/sys/questions/select/' //数据接口
+            , request: {
+                pageName: 'current',
+                limitName: 'size'
+            }
+            , parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.data.total, //解析数据长度
+                    "data": res.data.records //解析数据列表
+                };
+            }
+            , page: true //开启分页
+            , cols: [[ //表头
+                {field: 'description', title: '题目', width: 200, sort: true}
+                , {field: 'title', title: '一级专项', width: 200}
+                , {field: 'exclusiveTitle', title: '二级专项', width: 200}
+                , {field: 'optionCode', title: '正确答案选项', width: 200}
+                , {field: 'optionText', title: '正确答案内容', width: 200}
+                , {fixed: 'right', width: 178, align: 'center', toolbar: '#barDemo'}
+            ]]
+        });
+
+        table.on('toolbar(demo)', function (obj) {
+            switch (obj.event) {
+                case 'add':
+                    var data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：' + data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选' : '未全选');
+                    break;
+
+                //自定义头工具栏右侧图标 - 提示
+                case 'LAYTABLE_TIPS':
+                    layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+            }
+            ;
+        });
+    });
+</script>
+</body>
+</html>

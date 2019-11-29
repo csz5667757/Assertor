@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csz.assertor.sys.mapper.QuestionsMapper">
+	<resultMap id="QuestionVO" type="com.csz.assertor.sys.Vo.QuestionVO" >
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="exclusive_title" property="exclusiveTitle" jdbcType="VARCHAR" />
+		<result column="option_code" property="optionCode" jdbcType="VARCHAR" />
+		<result column="option_text" property="optionText" jdbcType="VARCHAR" />
+	</resultMap>
+
+    <select id="SelectQuestions" parameterType="String"  resultMap="QuestionVO">
+		SELECT
+		q.description ,
+		eg.title  ,
+		e.exclusive_title,
+		o.option_code ,
+		o.option_text
+		FROM
+			questions q
+		LEFT JOIN `exclusive` e ON q.exclusive_id = e.id
+		LEFT JOIN exclusive_group eg ON e.category_group_id = eg.id
+		LEFT JOIN `options` o ON q.id = o.question_id
+		WHERE q.answer_id = o.id
+		<if test="categoryGroupId!=null and categoryGroupId!=''">
+			AND e.category_group_id = #{categoryGroupId}
+		</if>
+		<if test="exclusiveId!=null and exclusiveId!=''">
+			AND e.id = #{exclusiveId}
+		</if>
+    </select>
+</mapper>

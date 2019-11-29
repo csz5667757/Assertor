@@ -14,8 +14,6 @@ spring:
     username: root
     password: 123456
     type: com.zaxxer.hikari.HikariDataSource
-  thymeleaf:
-    cache: false
 
 #日志信息
 logging:
@@ -25,6 +23,7 @@ logging:
 mybatis-plus:
   global-config:
     refresh-mapper: false
+
 
 
 

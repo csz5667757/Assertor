@@ -9,49 +9,57 @@ import com.csz.assertor.sys.service.IOperatUserService;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
  * <p>
- *  运营用户管理
+ * 运营用户管理
  * </p>
  *
  * @author assertor
  * @since 2019-11-26
  */
-@RestController
+
+@Controller
 @RequestMapping("/sys/user")
 @Api("运营用户管理")
 public class OperatUserController {
     @Autowired
     private IOperatUserService service;
 
+
     @PostMapping("/register")
-    public Response registe(@RequestParam String userName , @RequestParam String password,
+    @ResponseBody
+    public Response registe(@RequestParam String userName, @RequestParam String password,
                             @RequestParam String verifyPassword, HttpServletResponse response) throws IOException {
-        if (!(password.equals(verifyPassword))){
+        if (!(password.equals(verifyPassword))) {
             response.sendRedirect("/user/register");
             return ResultGenerator.failure("两次输入密码不一致");
         }
-        if (password.length()<6){
+        if (password.length() < 6) {
             response.sendRedirect("/user/register");
             return ResultGenerator.failure("密码不能少于六位");
         }
         OperatUser users = service.selectByUserName(userName);
-        if (users!=null){
+        if (users != null) {
             response.sendRedirect("/user/register");
             return ResultGenerator.failure("用户名已注册");
-        }
-        else {
+        } else {
             OperatUser user = new OperatUser();
             user.setUserName(userName);
             //加盐
             String salt = RandomStringUtils.randomAlphanumeric(8);
             user.setSalt(salt);
-            String dbPassword = DigestUtils.md5DigestAsHex((password + salt) .getBytes());
+            String dbPassword = DigestUtils.md5DigestAsHex((password + salt).getBytes());
             user.setPassword(dbPassword);
             service.insert(user);
             response.sendRedirect("/login");
@@ -60,14 +68,15 @@ public class OperatUserController {
     }
 
     @PostMapping("/login")
-    public Response login(@RequestParam String username, @RequestParam String password, HttpServletResponse response) throws IOException {
+    public String login(@RequestParam String username, @RequestParam String password
+                      , HttpServletRequest request , HttpServletResponse response
+    ) throws IOException {
         OperatUser user = service.selectByUserName(username);
         String salt = user.getSalt();
         if (!DigestUtils.md5DigestAsHex((password + salt).getBytes()).equals(user.getPassword())) {
             throw new OPException("用户名或密码错误！");
         }
-        response.sendRedirect("/index");
-        return  null;
+        request.setAttribute("nickname",user.getNickname());
+        return "indexs.btl";
     }
-
 }

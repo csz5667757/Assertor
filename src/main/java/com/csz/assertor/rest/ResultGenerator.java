@@ -81,6 +81,18 @@ public class ResultGenerator {
         return response;
     }
 
+
+    /**
+     * 请求成功
+     * @param data 返回的对象
+     * @return {@link Response}
+     */
+    public static <T> Response<T> table(T data){
+        Response<T> response = new Response<>(ResultEnum.TABLESUCC,data);
+        return response;
+    }
+
+
     /**
      * 请求成功
      * @param message 自定义消息文本

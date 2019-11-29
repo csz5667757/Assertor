@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>题目管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="../../static/css/font.css">
+    <link rel="stylesheet" href="../../static/css/xadmin.css">
+    <script src="../../static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../static/js/xadmin.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <form class="layui-form layui-col-space5" onsubmit="return false">
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <select name="categoryGroupId" id="cgId" lay-filter="cgFilter" lay-search>
+                                <option value="">直接选择或搜索选择</option>
+                                <%
+                                for(eg in egList){
+                                %>
+                                <option value="${eg.id}">${eg.title}</option>
+                                <%
+                                }
+                                %>
+                            </select>
+                        </div>
+
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <select name="exclusiveId" id = "exclusiveId"  lay-filter="eFilter"  lay-search>
+                            </select>
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <button class="layui-btn-sm" lay-submit="" lay-filter="submit"><i
+                                    class="layui-icon">&#xe615;</i></button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <table id="demo" lay-filter="demo"></table>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="add">上传题目</button>
+        </div>
+    </script>
+    <script>
+
+
+        //JavaScript代码区域
+        layui.use(['table', 'layedit', 'element', 'form'], function () {
+            var element = layui.element;
+            var table = layui.table;
+            var layedit = layui.layedit;
+            var form = layui.form;
+
+            function getExclucsive(data) {
+                var params={
+                    categoryGroupId:data.value
+                }
+                var categoryGroupId = data.value;
+                //检查项目添加到下拉框中
+                $.ajax({
+                    url: '/sys/questions/getExclusive',
+                    dataType: 'json',
+                    data : {"categoryGroupId":categoryGroupId},
+                    contentType: "application/json",
+                    type: 'GET',
+                    success: function (data) {
+                        $("#exclusiveId").empty();//清空下拉框的值
+                        $.each(data.data, function (index, item) {
+                            $('#exclusiveId').append(new Option(item.exclusiveTitle, item.id));// 下拉菜单里添加元素
+                            form.render("select");//重新渲染 固定写法
+                        });
+                    }
+                });
+            };
+
+            form.on('select(cgFilter)', function(data){
+            getExclucsive(data);
+            });
+
+            form.on('submit(submit)', function(data){
+                table.reload('demo', {where: data.field});
+                return false;
+            });
+
+            table.render({
+                elem: '#demo'
+                , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                , url: '/sys/questions/select/' //数据接口
+                , request: {
+                    pageName: 'current',
+                    limitName: 'size'
+                }
+                , parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.code, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.total, //解析数据长度
+                        "data": res.data.records //解析数据列表
+                    };
+                }
+                , page: true //开启分页
+                , cols: [[ //表头
+                    {field: 'description', title: '题目', width: 200, sort: true}
+                    , {field: 'title', title: '一级专项', width: 200}
+                    , {field: 'exclusiveTitle', title: '二级专项', width: 200}
+                    , {field: 'optionCode', title: '正确答案选项', width: 200}
+                    , {field: 'optionText', title: '正确答案内容', width: 200}
+                    , {fixed: 'right', width: 178, align: 'center', toolbar: '#barDemo'}
+                ]]
+            });
+
+            table.on('toolbar(demo)', function (obj) {
+                switch (obj.event) {
+                    case 'add':
+                        xadmin.open('上传题目','/sys/questions/upload')
+                        break;
+                    case 'getCheckLength':
+                        var data = checkStatus.data;
+                        layer.msg('选中了：' + data.length + ' 个');
+                        break;
+                    case 'isAll':
+                        layer.msg(checkStatus.isAll ? '全选' : '未全选');
+                        break;
+
+                    //自定义头工具栏右侧图标 - 提示
+                    case 'LAYTABLE_TIPS':
+                        layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                        break;
+                }
+                ;
+            });
+        });
+    </script>
+
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</body>
+</html>
