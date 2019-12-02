@@ -75,7 +75,7 @@
                         conentType: "json/application,charset=utf-8"
                         , url: "/sys/tech/delete"
                         , dataType: "json"
-                        , type: "POST"
+                        , type: "post"
                         , data: {
                             id: data.id
                         },

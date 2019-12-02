@@ -21,7 +21,11 @@ public class EditQuestionVO {
     private String egTitle;
     private String description;
     private List<Options> options;
-    private String analysisCode;
+    private String analysisText;
     private String answer;
+
+    //富文本
+    private String descriptionCode;
+    private String analysisCode;
 
 }

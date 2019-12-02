@@ -19,6 +19,7 @@ import com.csz.assertor.sys.service.IOptionsService;
 import com.csz.assertor.sys.service.IQuestionsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -91,9 +92,23 @@ public class QuestionsController {
     @ResponseBody
     @ApiOperation("上传题目")
     public Response uploadQuestion(@RequestBody QuestionsDTO questionsDTO){
+        System.out.println(questionsDTO);
         Questions questions = new Questions();
-        questions.setAnalysisCode(questionsDTO.getAnalysisCode());
-        questions.setDescription(questionsDTO.getDescription());
+        if (StringUtils.isNotBlank(questionsDTO.getAnalysisCode())){
+            questions.setAnalysisCode(questionsDTO.getAnalysisCode());
+        }
+        if (StringUtils.isNotBlank(questionsDTO.getDescription())){
+            questions.setDescription(questionsDTO.getDescription());
+        }
+        if (StringUtils.isNotBlank(questionsDTO.getAnalysisText())){
+            questions.setAnalysisText(questionsDTO.getAnalysisText());
+        }
+        if (StringUtils.isNotBlank(questionsDTO.getDescriptionCode())){
+            questions.setCode(questionsDTO.getDescriptionCode());
+        }
+        if (StringUtils.isNotBlank(questionsDTO.getDescriptionCode())){
+            questions.setCode(questionsDTO.getDescriptionCode());
+        }
         questions.setExclusiveId(questionsDTO.getExclusiveId());
         service.insert(questions);
         EntityWrapper<Questions> wrapper = new EntityWrapper<>();
@@ -101,22 +116,42 @@ public class QuestionsController {
         Questions questions2 = questions1.get(questions1.size() - 1);
 
         Options optionsA = new Options();
-        optionsA.setOptionText(questionsDTO.getOptionA());
+        if (StringUtils.isNotBlank(questionsDTO.getOptionA())){
+            optionsA.setOptionText(questionsDTO.getOptionA());
+        }
+        if (StringUtils.isNotBlank(questionsDTO.getOptionACode())){
+            optionsA.setOptionCode(questionsDTO.getOptionACode());
+        }
         optionsA.setQuestionId(questions2.getId());
         oService.insert(optionsA);
 
         Options optionsB = new Options();
-        optionsB.setOptionText(questionsDTO.getOptionB());
+        if (StringUtils.isNotBlank(questionsDTO.getOptionB())){
+            optionsB.setOptionText(questionsDTO.getOptionB());
+        }
+        if (StringUtils.isNotBlank(questionsDTO.getOptionBCode())){
+            optionsB.setOptionCode(questionsDTO.getOptionBCode());
+        }
         optionsB.setQuestionId(questions2.getId());
         oService.insert(optionsB);
 
         Options optionsC = new Options();
-        optionsC.setOptionText(questionsDTO.getOptionC());
+        if (StringUtils.isNotBlank(questionsDTO.getOptionC())){
+            optionsC.setOptionText(questionsDTO.getOptionC());
+        }
+        if (StringUtils.isNotBlank(questionsDTO.getOptionCCode())){
+            optionsC.setOptionCode(questionsDTO.getOptionCCode());
+        }
         optionsC.setQuestionId(questions2.getId());
         oService.insert(optionsC);
 
         Options optionsD = new Options();
-        optionsD.setOptionText(questionsDTO.getOptionD());
+        if (StringUtils.isNotBlank(questionsDTO.getOptionD())){
+            optionsD.setOptionText(questionsDTO.getOptionD());
+        }
+        if (StringUtils.isNotBlank(questionsDTO.getOptionDCode())){
+            optionsD.setOptionCode(questionsDTO.getOptionDCode());
+        }
         optionsD.setQuestionId(questions2.getId());
         oService.insert(optionsD);
 
@@ -151,10 +186,26 @@ public class QuestionsController {
         editQuestionVO.setCategoryGroupId(exclusive.getCategoryGroupId());
         editQuestionVO.setExclusiveTitle(exclusive.getExclusiveTitle());
         editQuestionVO.setEgTitle(exclusiveGroup.getTitle());
-        editQuestionVO.setAnalysisCode(question.getAnalysisCode());
-        editQuestionVO.setDescription(question.getDescription());
+        if (StringUtils.isNotBlank(question.getAnalysisText())){
+            editQuestionVO.setAnalysisText(question.getAnalysisText());
+        }
+        if (StringUtils.isNotBlank(question.getDescription())){
+            editQuestionVO.setDescription(question.getDescription());
+        }
         editQuestionVO.setAnswerId(question.getAnswerId());
         editQuestionVO.setOptions(options);
+
+        //富文本
+        if (StringUtils.isNotBlank(question.getCode())){
+            editQuestionVO.setDescriptionCode(question.getCode());
+        }
+        if (StringUtils.isNotBlank(question.getAnalysisCode())){
+            editQuestionVO.setAnalysisCode(question.getAnalysisCode());
+        }
+
+        if (StringUtils.isNotBlank(question.getCode())){
+            editQuestionVO.setDescriptionCode(question.getCode());
+        }
         List list = new ArrayList();
         int count = 0;
         String Answer=null;
@@ -172,6 +223,7 @@ public class QuestionsController {
         request.setAttribute("egList",egList);
         request.setAttribute("question",editQuestionVO);
         request.setAttribute("id",id);
+        System.out.println(editQuestionVO);
         return "editQuestions.btl";
     }
 
@@ -179,11 +231,28 @@ public class QuestionsController {
     @ResponseBody
     @ApiOperation("修改题目")
     public Response updateQuestions(@RequestBody QuestionsEditDTO questionsEditDTO){
+        System.out.println(questionsEditDTO);
         Questions questions = service.selectById(questionsEditDTO.getId());
-        questions.setAnalysisCode(questionsEditDTO.getAnalysisCode());
-        questions.setAnswerId(questionsEditDTO.getCorrectAnswer());
+        if (StringUtils.isNotBlank(questionsEditDTO.getAnalysisText())){
+            questions.setAnalysisText(questionsEditDTO.getAnalysisText());
+        }
+        if (StringUtils.isNotBlank(questionsEditDTO.getCorrectAnswer().toString())){
+            questions.setAnswerId(questionsEditDTO.getCorrectAnswer());
+        }
         questions.setExclusiveId(questionsEditDTO.getExclusiveId());
-        questions.setDescription(questionsEditDTO.getDescription());
+        if (StringUtils.isNotBlank(questionsEditDTO.getDescription())){
+            questions.setDescription(questionsEditDTO.getDescription());
+        }
+
+        //富文本
+        if (StringUtils.isNotBlank(questionsEditDTO.getAnalysisCode())){
+            questions.setAnalysisCode(questionsEditDTO.getAnalysisCode());
+        }
+
+        if (StringUtils.isNotBlank(questionsEditDTO.getDescriptionCode())){
+            questions.setCode(questionsEditDTO.getDescriptionCode());
+        }
+
         EntityWrapper<Questions> questionsEntityWrapper = new EntityWrapper<>();
         questionsEntityWrapper.eq("id",questions.getId());
         service.update(questions,questionsEntityWrapper);
@@ -192,10 +261,34 @@ public class QuestionsController {
         EntityWrapper<Options> wrapper = new EntityWrapper<>();
         wrapper.eq("question_id",questionsEditDTO.getId());
         List<Options> options = oService.selectList(wrapper);
-        options.get(0).setOptionText(questionsEditDTO.getOptionA());
-        options.get(1).setOptionText(questionsEditDTO.getOptionB());
-        options.get(2).setOptionText(questionsEditDTO.getOptionC());
-        options.get(3).setOptionText(questionsEditDTO.getOptionD());
+        if (StringUtils.isNotBlank(questionsEditDTO.getOptionA())){
+            options.get(0).setOptionText(questionsEditDTO.getOptionA());
+        }
+        if (StringUtils.isNotBlank(questionsEditDTO.getOptionB())){
+            options.get(1).setOptionText(questionsEditDTO.getOptionB());
+        }
+        if (StringUtils.isNotBlank(questionsEditDTO.getOptionC())){
+            options.get(2).setOptionText(questionsEditDTO.getOptionC());
+
+        }
+        if (StringUtils.isNotBlank(questionsEditDTO.getOptionD())){
+            options.get(3).setOptionText(questionsEditDTO.getOptionD());
+        }
+
+        //富文本
+        if (StringUtils.isNotBlank(questionsEditDTO.getOptionACode())){
+            options.get(0).setOptionCode(questionsEditDTO.getOptionACode());
+        }
+        if (StringUtils.isNotBlank(questionsEditDTO.getOptionB())){
+            options.get(1).setOptionCode(questionsEditDTO.getOptionBCode());
+        }
+        if (StringUtils.isNotBlank(questionsEditDTO.getOptionC())){
+            options.get(2).setOptionCode(questionsEditDTO.getOptionCCode());
+
+        }
+        if (StringUtils.isNotBlank(questionsEditDTO.getOptionD())){
+            options.get(3).setOptionCode(questionsEditDTO.getOptionDCode());
+        }
 
         EntityWrapper<Options> wrapper1 = new EntityWrapper<>();
         wrapper1.eq("id",options.get(0).getId());
@@ -213,6 +306,13 @@ public class QuestionsController {
         wrapper4.eq("id",options.get(3).getId());
         oService.update(options.get(3),wrapper4);
 
+        return ResultGenerator.ok();
+    }
+
+    @GetMapping("delete")
+    @ResponseBody
+    public Response deleteQuestionById(@RequestParam String questionId){
+        service.DeleteQuestion(questionId);
         return ResultGenerator.ok();
     }
 }

@@ -32,7 +32,7 @@
 
                 <label class="layui-form-label">二级专项</label>
                 <div class="layui-input-inline">
-                    <select name="exclusiveId" id="exclusiveId"   lay-verify="required"  lay-filter="eFilter" lay-search>
+                    <select name="exclusiveId" id="exclusiveId"  lay-verify="required"  lay-filter="eFilter" lay-search>
                     </select>
                 </div>
 
@@ -41,35 +41,41 @@
             <div class="layui-form-item layui-form-text">
                 <label class="layui-form-label">题目描述</label>
                 <div class="layui-input-block">
-                    <textarea name="description" id = "description"  lay-verify="required"  placeholder="请输入题目" class="layui-textarea"></textarea>
+                    <input name="description" id = "description"  placeholder="请输入题目" class="layui-input"></input>
+                    <textarea name="descriptionCode" id = "descriptionCode"   placeholder="请输入题目"></textarea>
+
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">选项A:</label>
                 <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionA" value="" class="layui-input">
+                    <input type="text" id="optionA"  name="optionA" value="" class="layui-input">
+                    <textarea id="optionACode" name="optionACode"></textarea>
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">选项B:</label>
                 <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionB" value="" class="layui-input">
+                    <input type="text"  name="optionB" value="" class="layui-input">
+                    <textarea id="optionBCode" name="optionBCode"></textarea>
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">选项C:</label>
                 <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionC" value="" class="layui-input">
+                    <input type="text"   name="optionC" value="" class="layui-input">
+                    <textarea  id = "optionCCode" name="optionCCode"></textarea>
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">选项D:</label>
                 <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionD" value="" class="layui-input">
+                    <input type="text"  name="optionD" value="" class="layui-input">
+                    <textarea  id = "optionDCode" name="optionDCode"></textarea>
                 </div>
             </div>
 
@@ -89,7 +95,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">解析:</label>
                 <div class="layui-input-block">
-                <textarea name = "analysisCode" id="demo" ></textarea>
+                    <input type="text"   name="analysisText" value="" class="layui-input">
+                    <textarea name = "analysisCode" id="demo" ></textarea>
                 </div>
             </div>
 
@@ -109,6 +116,12 @@
         var form = layui.form, layer = layui.layer, laydate = layui.laydate, layedit = layui.layedit;
 
         var editIndex = layedit.build('demo'); //建立编辑器
+        var editIndex1 = layedit.build('optionACode',{height:100}); //建立编辑器
+        var editIndex2 = layedit.build('optionBCode',{height:100}); //建立编辑器
+        var editIndex3 = layedit.build('optionCCode',{height:100}); //建立编辑器
+        var editIndex4 = layedit.build('optionDCode',{height:100}); //建立编辑器
+        var editIndex5 = layedit.build('descriptionCode',{height:100}); //建立编辑器
+
         function getExclucsive(data) {
             var params = {
                 categoryGroupId: data.value
@@ -170,26 +183,32 @@
         // 监听提交
         form.on('submit(submit)', function (data) {
              data.field.analysisCode=layedit.getContent(editIndex);
-            // layer.alert(JSON.stringify(data.field), {
-            //                  title: '最终的提交信息'
-            //              });
-            layer.confirm('确定提交?', {icon: 3, title: '提示'}, function (index) {
-                $.ajax({
-                    type: 'POST',
-                    url: "/sys/questions/uploadQuestions",
-                    contentType:"application/json",
-                    dataType:"JSON",
-                    data: JSON.stringify(data.field),
-                    success: function (result) {
-                        console.log(result);
-                        layer.alert(result.message, {title: '处理结果!'},
-                        function(){
-                                    window.parent.location.reload();
-                        });
-                    }
-                });
-                layer.close(index);
-            });
+             data.field.optionACode=layedit.getContent(editIndex1);
+             data.field.optionBCode=layedit.getContent(editIndex2);
+             data.field.optionCCode=layedit.getContent(editIndex3);
+             data.field.optionDCode=layedit.getContent(editIndex4);
+             data.field.descriptionCode=layedit.getContent(editIndex5);
+
+            //layer.alert(JSON.stringify(data.field), {
+            //                 title: '最终的提交信息'
+            //             });
+        layer.confirm('确定提交?', {icon: 3, title: '提示'}, function (index) {
+            $.ajax({
+                type: 'POST',
+                url: "/sys/questions/uploadQuestions",
+                contentType:"application/json",
+                dataType:"JSON",
+                data: JSON.stringify(data.field),
+                success: function (result) {
+                    console.log(result);
+                    layer.alert(result.message, {title: '处理结果!'},
+                     function(){
+                                 window.parent.location.reload();
+                     });
+                 }
+             });
+             layer.close(index);
+         });
             return false;
         });
     });

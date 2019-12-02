@@ -19,6 +19,15 @@ public class QuestionsEditDTO {
     private String optionC;
     private String optionD;
     private Integer correctAnswer;
+    private String analysisText;
+
+    //富文本
+    private String descriptionCode;
+    private String optionACode;
+    private String optionBCode;
+    private String optionCCode;
+    private String optionDCode;
     private String analysisCode;
+
 
 }

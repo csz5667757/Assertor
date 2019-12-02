@@ -1,8 +1,6 @@
 package com.csz.assertor.utils;
 
-import org.springframework.util.DigestUtils;
-
-import static com.csz.assertor.utils.MD5Util.convertMD5;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Assertor
@@ -23,8 +21,10 @@ public class test {
 //
 //        String b = convertMD5(convertMD5(a));
 //        System.out.println(b);
-        String a = "123";
-        String b = "123";
-        System.out.println(a.equals(b));
+        String a = null;
+//        String b = "123";
+//        System.out.println(a.equals(b));
+        boolean blank = StringUtils.isNotBlank(a);
+        System.out.println(blank);
     }
 }

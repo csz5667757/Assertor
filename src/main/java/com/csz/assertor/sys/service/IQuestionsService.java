@@ -15,4 +15,6 @@ import com.csz.assertor.sys.entity.Questions;
  */
 public interface IQuestionsService extends IService<Questions> {
     Page<QuestionVO> SelectQuestions(String categoryGroupId, String exclusiveId, Page<QuestionVO> page);
+
+    void DeleteQuestion(String questionId);
 }

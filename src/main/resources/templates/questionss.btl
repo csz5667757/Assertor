@@ -64,8 +64,6 @@
         </div>
     </script>
     <script>
-
-
         //JavaScript代码区域
         layui.use(['table', 'layedit', 'element', 'form'], function () {
             var element = layui.element;
@@ -122,11 +120,10 @@
                 }
                 , page: true //开启分页
                 , cols: [[ //表头
-                    {field: 'description', title: '题目', width: 200, sort: true}
+                    {field: 'description', title: '题目', minWidth: 300, sort: true}
                     , {field: 'title', title: '一级专项', width: 200}
                     , {field: 'exclusiveTitle', title: '二级专项', width: 200}
-                    , {field: 'optionCode', title: '正确答案选项', width: 200}
-                    , {field: 'optionText', title: '正确答案内容', width: 200}
+                    , {field: 'optionText', title: '正确答案内容', minWidth: 200}
                     , {fixed: 'right', width: 178, align: 'center', toolbar: '#barDemo'}
                 ]]
             });
@@ -137,23 +134,23 @@
                         if (obj.event === 'detail') {
                             layer.msg('ID：' + data.id + ' 的查看操作');
                         } else if (obj.event === 'del') {
-                            layer.confirm('真的删除"' + data.name + '"么', function (index) {
+                            console.log(data);
+                            layer.confirm('真的删除"' + data.description + '"么', function (index) {
                                 $.ajax({
                                     conentType: "json/application,charset=utf-8"
-                                    , url: "/sys/tech/delete"
+                                    , url: "/sys/questions/delete"
                                     , dataType: "json"
-                                    , type: "POST"
+                                    , type: "GET"
+                                    , contentType:"application/json"
                                     , data: {
-                                        id: data.id
+                                        questionId: data.id
                                     },
                                     success: function (result) {
-                                        layer.alert(result.message, {title: '处理结果!'},function(){
-                                                layer.close(index);
-                                                table.reload("demo");
-                                        });
+                                        layer.alert(result.message, {title: '处理结果!'});
                                     }
                                 })
-
+                                    layer.close(index);
+                                    table.reload("demo");
                             });
                         } else if (obj.event === 'edit') {
                             var questionId = data.id;
