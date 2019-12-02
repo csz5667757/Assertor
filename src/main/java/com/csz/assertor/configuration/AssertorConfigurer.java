@@ -30,6 +30,7 @@ public class AssertorConfigurer {
     @Bean
     public BeetlTemplateCustomize beetlTemplateCustomize(){
         return new BeetlTemplateCustomize(){
+            @Override
             public void customize(GroupTemplate groupTemplate){
             }
         };

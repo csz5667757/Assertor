@@ -22,7 +22,7 @@
 		LEFT JOIN exclusive_group eg ON e.category_group_id = eg.id
 		LEFT JOIN `options` o ON q.id = o.question_id
 		WHERE q.answer_id = o.id
-		<if test="categoryGroupId!=null and categoryGroupId!=''">
+		<if test="categoryGroupId != null and categoryGroupId !='' ">
 			AND e.category_group_id = #{categoryGroupId}
 		</if>
 		<if test="exclusiveId!=null and exclusiveId!=''">
