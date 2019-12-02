@@ -35,7 +35,6 @@
                                 }
                                 %>
                             </select>
-
                         </div>
                             <div class="layui-input-inline layui-show-xs-block">
                             <select name="level"  lay-search>
@@ -82,7 +81,7 @@
             var form = layui.form;
 
             form.on('submit(submit)', function(data){
-                table.reload('demo', {where: data.field});
+                //table.reload('demo', {where: data.field});
                 return false;
             });
 
@@ -144,7 +143,7 @@
             table.on('toolbar(demo)', function (obj) {
                 switch (obj.event) {
                     case 'add':
-                        xadmin.open('上传套题','/sys/questions/upload')
+                        xadmin.open('上传套题','/sys/recommended/add')
                         break;
                     case 'getCheckLength':
                         var data = checkStatus.data;

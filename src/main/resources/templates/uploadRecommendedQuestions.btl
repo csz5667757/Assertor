@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../static/css/font.css">
+    <link rel="stylesheet" href="../../static/css/xadmin.css">
+    <script src="../../static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../static/js/xadmin.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<form class="layui-form" action="" lay-filter="news">
+    <div class="layui-fluid">
+        <div class="layui-row">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">题目描述</label>
+                <div class="layui-input-block">
+                    <textarea name="description" id="description" lay-verify="required" placeholder="请输入题目"
+                              class="layui-textarea"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">选项A:</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" name="optionA" value="" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">选项B:</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" name="optionB" value="" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">选项C:</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" name="optionC" value="" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">选项D:</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" name="optionD" value="" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">正确答案:</label>
+                <div class="layui-input-inline">
+                    <select name="correctAnswer" required>
+                        <option value="">请选择正确答案</option>
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">解析:</label>
+                <div class="layui-input-block">
+                    <textarea name="analysisCode" id="demo"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="submit">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form, layer = layui.layer, laydate = layui.laydate, layedit = layui.layedit;
+         layedit.build('demo'); //建立编辑器
+
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //自定义验证规则
+        form.verify({
+            title: function (value) {
+                if (value.length < 5) {
+                    return '标题至少得5个字符啊';
+                }
+            }
+            , pass: [
+                /^[\S]{6,12}$/
+                , '密码必须6到12位，且不能出现空格'
+            ]
+            , content: function (value) {
+                layedit.sync(editIndex);
+            }
+        });
+
+        // 监听提交
+        form.on('submit(submit)', function (data) {
+            data.field.analysisCode = layedit.getContent(editIndex);
+            data.field.recommendedId = ${recommendedId};
+            layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            });
+            // layer.confirm('确定提交?', {icon: 3, title: '提示'}, function (index) {
+            //     $.ajax({
+            //         type: 'POST',
+            //         url: "/sys/questions/uploadQuestions",
+            //         contentType:"application/json",
+            //         dataType:"JSON",
+            //         data: JSON.stringify(data.field),
+            //         success: function (result) {
+            //             console.log(result);
+            //             layer.alert(result.message, {title: '处理结果!'},
+            //                 function(){
+            //                     window.parent.location.reload();
+            //                 });
+            //         }
+            //     });
+            //     layer.close(index);
+            // });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>
