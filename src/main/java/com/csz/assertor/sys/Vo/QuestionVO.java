@@ -12,6 +12,8 @@ import lombok.Data;
 @Data
 public class QuestionVO {
 
+    private Integer id;
+
     private String description;
 
     private String title;
