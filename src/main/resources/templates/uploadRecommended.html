@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../static/css/font.css">
+    <link rel="stylesheet" href="../../static/css/xadmin.css">
+    <script src="../../static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../static/js/xadmin.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<form class="layui-form" action="" lay-filter="news">
+    <div class="layui-fluid">
+        <div class="layui-row">
+            <div class="layui-form-item">
+                <label class="layui-form-label">套题名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" lay-verify="required" name="recommend" value="" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户喜好类目</label>
+                <div class="layui-input-inline">
+                    <select name="exclusiveId" id="exclusiveId" lay-verify="required" lay-filter="eFilter" lay-search>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">难度</label>
+                <div class="layui-input-inline">
+                    <select name="level" lay-verify="required" lay-search>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item  layui-form-text">
+                <label class="layui-form-label">套题题目</label>
+                <table id="demo" lay-filter="demo"></table>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="submit">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    flag = 0;
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form, layer = layui.layer, laydate = layui.laydate, layedit = layui.layedit;
+
+        table.render({
+            elem: '#demo'
+            , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , url: '/sys/recommended/select/' //数据接口
+            , request: {
+                pageName: 'current',
+                limitName: 'size'
+            }
+            , parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.data.total, //解析数据长度
+                    "data": res.data.records //解析数据列表
+                };
+            }
+            , page: true //开启分页
+            , cols: [[ //表头
+                {field: 'title', title: '套题名称', minWidth: 200, sort: true}
+                , {field: 'name', title: '一级专项', width: 200}
+                , {field: 'level', title: '难度', width: 200}
+                , {fixed: 'right', width: 178, align: 'center', toolbar: '#barDemo'}
+            ]]
+        });
+
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //自定义验证规则
+        form.verify({
+            title: function (value) {
+                if (value.length < 5) {
+                    return '标题至少得5个字符啊';
+                }
+            }
+            , pass: [
+                /^[\S]{6,12}$/
+                , '密码必须6到12位，且不能出现空格'
+            ]
+            , content: function (value) {
+                layedit.sync(editIndex);
+            }
+        });
+
+        //监听指定开关
+        form.on('switch(switchTest)', function (data) {
+            layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+                offset: '6px'
+            });
+            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+        });
+
+        // 监听提交
+        form.on('submit(submit)', function (data) {
+            data.field.analysisCode = layedit.getContent(editIndex);
+            // layer.alert(JSON.stringify(data.field), {
+            //                  title: '最终的提交信息'
+            //              });
+            layer.confirm('确定提交?', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: "/sys/questions/uploadQuestions",
+                    contentType: "application/json",
+                    dataType: "JSON",
+                    data: JSON.stringify(data.field),
+                    success: function (result) {
+                        console.log(result);
+                        layer.alert(result.message, {title: '处理结果!'},
+                            function () {
+                                window.parent.location.reload();
+                            });
+                    }
+                });
+                layer.close(index);
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csz.assertor.sys.mapper.RecommendedMapper">
+
+    <resultMap id="RecommendedVO" type="com.csz.assertor.sys.Vo.RecommendedVO" >
+        <result column="id" property="id" jdbcType="INTEGER" />
+        <result column="level" property="level" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="selectRecommended" resultMap="RecommendedVO">
+        select r.`level`,r.title,t.`name`,r.id
+        from recommended r
+        LEFT JOIN tech_category t on r.tech_category_id = t.id
+        where 1=1
+        <if test="level!=null and level!=''">
+            AND  r.level = #{level}
+        </if>
+        <if test="techCategoryId!=null and techCategoryId!=''">
+            and r.tech_category_id= #{techCategoryId}
+        </if>
+    </select>
+</mapper>

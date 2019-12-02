@@ -121,7 +121,7 @@
                                     <cite>题目管理</cite></a>
                             </li>
                                 <li>
-                                    <a onclick="xadmin.add_tab('套题管理','cate.html')">
+                                    <a onclick="xadmin.add_tab('套题管理','../recommended/page')">
                                         <i class="iconfont">&#xe6a7;</i>
                                         <cite>套题管理</cite></a>
                                 </li>

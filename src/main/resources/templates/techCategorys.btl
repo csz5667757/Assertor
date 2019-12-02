@@ -85,6 +85,7 @@
                     })
                     layer.close(index);
                     table.reload("demo");
+
                 });
             } else if (obj.event === 'edit') {
                 layer.open({
@@ -109,61 +110,61 @@
                     }
                 })
             }
-            //头工具栏事件
-            table.on('toolbar(demo)', function (obj) {
-                switch (obj.event) {
-                    case 'add':
-                                console.log(obj);
-                        layer.open({
-                            title: "添加类目"
-                            , btnAlign: 'c' //按钮居中
-                            , shade: 0//不显示遮罩
-                            , btn:null
-                            , area: '500px;'
-                            , content: "<form class='layui-form' action='/sys/tech/add' method='post'>" +
-                                "<div class='layui-form-item'>" +
-                                "<label  class='layui-form-label' >类目：</label>" + "<div class='layui-input-block'>" +
-                                "<input class='layui-input' name='category' required></div></div>" +
+        });
 
-                                "<button class='layui-btn layui-btn-primary'  type='submit' style='margin-top: 10px;: 20px; margin-left:200px'>提交</button>" +
-                                "</form>"
-                             ,yes: function () {
-                                                      parent.layui.closeAll();
-                                                      parent.layui.table.reload('demo');//重载父页表格，参数为表格ID
-                                                  }
-                        })
-                        break;
-                }
-                ;
-            });
-
-            //触发事件
-            var active = {
-                setTop: function () {
-                    var that = this;
-                }
-                , offset: function (othis) {
-                    var type = othis.data('type')
-                        , text = othis.text();
+        //头工具栏事件
+        table.on('toolbar(demo)', function (obj) {
+            switch (obj.event) {
+                case 'add':
+                    console.log(obj);
                     layer.open({
-                        type: 1
-                        , offset: type
-                        , id: 'layerDemo' + type //防止重复弹出
-                        , content: '<div style="padding: 20px 20px">' + text + '</div>'
-                        , btn: '关闭全部'
+                        title: "添加类目"
                         , btnAlign: 'c' //按钮居中
-                        , shade: 0
-                        , yes: function () {
-                            layer.closeAll();
-                        }
-                    });
-                }
-            };
+                        , shade: 0//不显示遮罩
+                        , btn:null
+                        , area: '500px;'
+                        , content: "<form class='layui-form' action='/sys/tech/add' method='post'>" +
+                            "<div class='layui-form-item'>" +
+                            "<label  class='layui-form-label' >类目：</label>" + "<div class='layui-input-block'>" +
+                            "<input class='layui-input' name='category' required></div></div>" +
 
-            $('#layer').on('click', function () {
-                var othis = $(this), method = othis.data('method');
-                active[method] ? active[method].call(this, othis) : '';
-            });
+                            "<button class='layui-btn layui-btn-primary'  type='submit' style='margin-top: 10px;: 20px; margin-left:200px'>提交</button>" +
+                            "</form>"
+                        ,yes: function () {
+                            parent.layui.closeAll();
+                            parent.layui.table.reload('demo');//重载父页表格，参数为表格ID
+                        }
+                    })
+                    break;
+            };
+        });
+
+        //触发事件
+        var active = {
+            setTop: function () {
+                var that = this;
+            }
+            , offset: function (othis) {
+                var type = othis.data('type')
+                    , text = othis.text();
+                layer.open({
+                    type: 1
+                    , offset: type
+                    , id: 'layerDemo' + type //防止重复弹出
+                    , content: '<div style="padding: 20px 20px">' + text + '</div>'
+                    , btn: '关闭全部'
+                    , btnAlign: 'c' //按钮居中
+                    , shade: 0
+                    , yes: function () {
+                        layer.closeAll();
+                    }
+                });
+            }
+        };
+
+        $('#layer').on('click', function () {
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
         });
     });
 </script>

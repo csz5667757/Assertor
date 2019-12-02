@@ -19,11 +19,10 @@
                 <label class="layui-form-label">一级专项</label>
                 <div class="layui-input-inline">
                     <select lay-filter="cgFilter"  lay-verify="required"  lay-search>
-                        <option value="">直接选择或搜索选择</option>
                         <%
                         for(eg in egList){
                         %>
-                        <option value="${eg.id}">${eg.title}</option>
+                        <option value="${eg.id}" ${question.categoryGroupId}==${eg.id}?"selected">${eg.title}</option>
                         <%
                         }
                         %>
@@ -33,6 +32,7 @@
                 <label class="layui-form-label">二级专项</label>
                 <div class="layui-input-inline">
                     <select name="exclusiveId" id="exclusiveId"   lay-verify="required"  lay-filter="eFilter" lay-search>
+                        <option value="${question.exclusiveId}">${question.exclusiveTitle}</option>
                     </select>
                 </div>
 
@@ -41,55 +41,54 @@
             <div class="layui-form-item layui-form-text">
                 <label class="layui-form-label">题目描述</label>
                 <div class="layui-input-block">
-                    <textarea name="description" id = "description"  lay-verify="required"  placeholder="请输入题目" class="layui-textarea"></textarea>
+                    <textarea name="description" id = "description"  lay-verify="required"  placeholder="请输入题目" class="layui-textarea">${question.description}</textarea>
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">选项A:</label>
                 <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionA" value="" class="layui-input">
+                    <input type="text" lay-verify="required" name="optionA" value="${question.options[0].optionText}" class="layui-input">
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">选项B:</label>
                 <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionB" value="" class="layui-input">
+                    <input type="text" lay-verify="required" name="optionB" value="${question.options[1].optionText}" class="layui-input">
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">选项C:</label>
                 <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionC" value="" class="layui-input">
+                    <input type="text" lay-verify="required" name="optionC" value="${question.options[2].optionText}" class="layui-input">
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">选项D:</label>
                 <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionD" value="" class="layui-input">
+                    <input type="text" lay-verify="required" name="optionD" value="${question.options[3].optionText}" class="layui-input">
                 </div>
             </div>
 
-                  <div class="layui-form-item">
-                                        <label class="layui-form-label">正确答案:</label>
-                                        <div class="layui-input-inline">
-                                        <select name="correctAnswer" required>
-                                        <option value="">请选择正确答案</option>
-                                        <option value="1">A</option>
-                                        <option value="2">B</option>
-                                        <option value="3">C</option>
-                                        <option value="4">D</option>
-                                        </select>
-                                        </div>
-                                    </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">正确答案:</label>
+                <div class="layui-input-inline">
+                    <select name="correctAnswer" required>
+                        <option value="${question.options[0].id}" ${question.options[0].id}==${question.answerId}?"selected">A</option>
+                        <option value="${question.options[1].id}" ${question.options[1].id}==${question.answerId}?"selected">B</option>
+                        <option value="${question.options[2].id}" ${question.options[2].id}==${question.answerId}?"selected">C</option>
+                        <option value="${question.options[3].id}" ${question.options[3].id}==${question.answerId}?"selected">D</option>
+                    </select>
+                </div>
+            </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">解析:</label>
                 <div class="layui-input-block">
-                <textarea name = "analysisCode" id="demo" ></textarea>
+                    <textarea name = "analysisCode" id="demo">${question.analysisCode}</textarea>
                 </div>
             </div>
 
@@ -169,23 +168,24 @@
 
         // 监听提交
         form.on('submit(submit)', function (data) {
-             data.field.analysisCode=layedit.getContent(editIndex);
-            // layer.alert(JSON.stringify(data.field), {
-            //                  title: '最终的提交信息'
-            //              });
+            data.field.analysisCode=layedit.getContent(editIndex);
+            data.field.id = ${id};
+             //layer.alert(JSON.stringify(data.field), {
+             //                 title: '最终的提交信息'
+             //             });
             layer.confirm('确定提交?', {icon: 3, title: '提示'}, function (index) {
                 $.ajax({
                     type: 'POST',
-                    url: "/sys/questions/uploadQuestions",
+                    url: "/sys/questions/updateQuestions",
                     contentType:"application/json",
                     dataType:"JSON",
                     data: JSON.stringify(data.field),
                     success: function (result) {
                         console.log(result);
                         layer.alert(result.message, {title: '处理结果!'},
-                        function(){
-                                    window.parent.location.reload();
-                        });
+                            function(){
+                                window.parent.location.reload();
+                            });
                     }
                 });
                 layer.close(index);

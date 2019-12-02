@@ -2,7 +2,7 @@
 <html class="x-admin-sm">
 <head>
     <meta charset="UTF-8">
-    <title>题目管理</title>
+    <title>套题管理</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -25,22 +25,30 @@
                 <div class="layui-card-body ">
                     <form class="layui-form layui-col-space5" onsubmit="return false">
                         <div class="layui-input-inline layui-show-xs-block">
-                            <select name="categoryGroupId" id="cgId" lay-filter="cgFilter" lay-search>
-                                <option value="">直接选择或搜索选择</option>
+                            <select name="techCategoryId"  lay-search>
+                                <option value="">选择用户偏好</option>
                                 <%
-                                for(eg in egList){
+                                for(tcg in tcgList){
                                 %>
-                                <option value="${eg.id}">${eg.title}</option>
+                                <option value="${tcg.id}">${tcg.name}</option>
                                 <%
                                 }
                                 %>
                             </select>
-                        </div>
 
-                        <div class="layui-input-inline layui-show-xs-block">
-                            <select name="exclusiveId" id = "exclusiveId"  lay-filter="eFilter"  lay-search>
-                            </select>
                         </div>
+                            <div class="layui-input-inline layui-show-xs-block">
+                            <select name="level"  lay-search>
+                                <option value="">选择套题难度</option>
+                                <%
+                                for(level in levelList){
+                                %>
+                                <option value="${level}">${level}</option>
+                                <%
+                                }
+                                %>
+                            </select>
+                            </div>
                         <div class="layui-inline layui-show-xs-block">
                             <button class="layui-btn-sm" lay-submit="" lay-filter="submit"><i
                                     class="layui-icon">&#xe615;</i></button>
@@ -60,7 +68,7 @@
 
     <script type="text/html" id="toolbarDemo">
         <div class="layui-btn-container">
-            <button class="layui-btn layui-btn-sm" lay-event="add">上传题目</button>
+            <button class="layui-btn layui-btn-sm" lay-event="add">上传套题</button>
         </div>
     </script>
     <script>
@@ -73,32 +81,6 @@
             var layedit = layui.layedit;
             var form = layui.form;
 
-            function getExclucsive(data) {
-                var params={
-                    categoryGroupId:data.value
-                }
-                var categoryGroupId = data.value;
-                //检查项目添加到下拉框中
-                $.ajax({
-                    url: '/sys/questions/getExclusive',
-                    dataType: 'json',
-                    data : {"categoryGroupId":categoryGroupId},
-                    contentType: "application/json",
-                    type: 'GET',
-                    success: function (data) {
-                        $("#exclusiveId").empty();//清空下拉框的值
-                        $.each(data.data, function (index, item) {
-                            $('#exclusiveId').append(new Option(item.exclusiveTitle, item.id));// 下拉菜单里添加元素
-                            form.render("select");//重新渲染 固定写法
-                        });
-                    }
-                });
-            };
-
-            form.on('select(cgFilter)', function(data){
-            getExclucsive(data);
-            });
-
             form.on('submit(submit)', function(data){
                 table.reload('demo', {where: data.field});
                 return false;
@@ -107,7 +89,7 @@
             table.render({
                 elem: '#demo'
                 , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-                , url: '/sys/questions/select/' //数据接口
+                , url: '/sys/recommended/select/' //数据接口
                 , request: {
                     pageName: 'current',
                     limitName: 'size'
@@ -122,49 +104,47 @@
                 }
                 , page: true //开启分页
                 , cols: [[ //表头
-                    {field: 'description', title: '题目', width: 200, sort: true}
-                    , {field: 'title', title: '一级专项', width: 200}
-                    , {field: 'exclusiveTitle', title: '二级专项', width: 200}
-                    , {field: 'optionCode', title: '正确答案选项', width: 200}
-                    , {field: 'optionText', title: '正确答案内容', width: 200}
+                    {field: 'title', title: '套题名称', minWidth: 200, sort: true}
+                    , {field: 'name', title: '一级专项', width: 200}
+                    , {field: 'level', title: '难度', width: 200}
                     , {fixed: 'right', width: 178, align: 'center', toolbar: '#barDemo'}
                 ]]
             });
 
-             //监听工具条
-                    table.on('tool(demo)', function (obj) {
-                        var data = obj.data;
-                        if (obj.event === 'detail') {
-                            layer.msg('ID：' + data.id + ' 的查看操作');
-                        } else if (obj.event === 'del') {
-                            layer.confirm('真的删除"' + data.name + '"么', function (index) {
-                                $.ajax({
-                                    conentType: "json/application,charset=utf-8"
-                                    , url: "/sys/tech/delete"
-                                    , dataType: "json"
-                                    , type: "POST"
-                                    , data: {
-                                        id: data.id
-                                    },
-                                    success: function (result) {
-                                        layer.alert(result.message, {title: '处理结果!'},function(){
-                                                layer.close(index);
-                                                table.reload("demo");
-                                        });
-                                    }
-                                })
+            //监听工具条
+            table.on('tool(demo)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'detail') {
+                    layer.msg('ID：' + data.id + ' 的查看操作');
+                } else if (obj.event === 'del') {
+                    layer.confirm('真的删除"' + data.name + '"么', function (index) {
+                        $.ajax({
+                            conentType: "json/application,charset=utf-8"
+                            , url: "/sys/tech/delete"
+                            , dataType: "json"
+                            , type: "POST"
+                            , data: {
+                                id: data.id
+                            },
+                            success: function (result) {
+                                layer.alert(result.message, {title: '处理结果!'},function(){
+                                    layer.close(index);
+                                    table.reload("demo");
+                                });
+                            }
+                        })
 
-                            });
-                        } else if (obj.event === 'edit') {
-                            var questionId = data.id;
-                            xadmin.open('修改题目','/sys/questions/edit?id='+questionId);
-                        }
                     });
+                } else if (obj.event === 'edit') {
+                    var questionId = data.id;
+                    xadmin.open('修改题目','/sys/questions/edit?id='+questionId);
+                }
+            });
 
             table.on('toolbar(demo)', function (obj) {
                 switch (obj.event) {
                     case 'add':
-                        xadmin.open('上传题目','/sys/questions/upload')
+                        xadmin.open('上传套题','/sys/questions/upload')
                         break;
                     case 'getCheckLength':
                         var data = checkStatus.data;

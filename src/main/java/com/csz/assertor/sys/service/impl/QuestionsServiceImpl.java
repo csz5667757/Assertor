@@ -20,6 +20,6 @@ import org.springframework.stereotype.Service;
 public class QuestionsServiceImpl extends ServiceImpl<QuestionsMapper, Questions> implements IQuestionsService {
     @Override
     public Page<QuestionVO> SelectQuestions(String categoryGroupId, String exclusiveId, Page<QuestionVO> page) {
-        return page.setRecords(this.baseMapper.SelectQuestions(categoryGroupId,exclusiveId,page));
+        return page.setRecords(this.baseMapper.selectQuestions(categoryGroupId,exclusiveId,page));
     }
 }
