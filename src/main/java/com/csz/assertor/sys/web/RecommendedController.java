@@ -67,6 +67,11 @@ public class RecommendedController {
         return "recommended.btl";
     }
 
+    /**
+     *@Author: luoluo
+     *@date: 2019/12/2
+     * 查看套题题目信息
+     */
     @GetMapping("select")
     @ResponseBody
     public Response select(@RequestParam(required = false) Integer techCategoryId,

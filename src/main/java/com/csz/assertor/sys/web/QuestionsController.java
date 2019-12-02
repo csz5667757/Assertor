@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.csz.assertor.rest.ResultGenerator;
 import com.csz.assertor.rest.response.Response;
+import com.csz.assertor.sys.DTO.GetOneQuestionDto;
 import com.csz.assertor.sys.DTO.QuestionsDTO;
 import com.csz.assertor.sys.DTO.QuestionsEditDTO;
 import com.csz.assertor.sys.Vo.EditQuestionVO;
+import com.csz.assertor.sys.Vo.QuestionAndOptionsVO;
 import com.csz.assertor.sys.Vo.QuestionVO;
 import com.csz.assertor.sys.entity.Exclusive;
 import com.csz.assertor.sys.entity.ExclusiveGroup;
@@ -214,5 +216,13 @@ public class QuestionsController {
         oService.update(options.get(3),wrapper4);
 
         return ResultGenerator.ok();
+    }
+
+
+    @GetMapping("/getOne")
+    public Response<QuestionAndOptionsVO> GetOne(GetOneQuestionDto getOneQuestionDto){
+
+
+        return null;
     }
 }
