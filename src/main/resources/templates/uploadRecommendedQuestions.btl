@@ -15,61 +15,67 @@
 <form class="layui-form" action="" lay-filter="news">
     <div class="layui-fluid">
         <div class="layui-row">
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">题目描述</label>
-                <div class="layui-input-block">
-                    <textarea name="description" id="description" lay-verify="required" placeholder="请输入题目"
-                              class="layui-textarea"></textarea>
-                </div>
-            </div>
+          <div class="layui-form-item layui-form-text">
+                          <label class="layui-form-label">题目描述</label>
+                          <div class="layui-input-block">
+                              <input name="description" id = "description" value="${question.description}"  placeholder="请输入题目" class="layui-input"></input>
+                              <textarea name="descriptionCode" id = "descriptionCode"   placeholder="请输入题目" class="layui-textarea">${question.descriptionCode}</textarea>
+                          </div>
+                      </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">选项A:</label>
-                <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionA" value="" class="layui-input">
-                </div>
-            </div>
+                      <div class="layui-form-item">
+                          <label class="layui-form-label">选项A:</label>
+                          <div class="layui-input-block">
+                              <input type="text"  name="optionA" value="<%if(!(question.options==null)){%>${question.options[0].optionText}<%}%>" class="layui-input">
+                              <input type="text" id="optionACode"   name="optionACode" value="<%if(!(question.options==null)){%>${question.options[0].optionCode}<%}%>" class="layui-input">
+                          </div>
+                      </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">选项B:</label>
-                <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionB" value="" class="layui-input">
-                </div>
-            </div>
+                      <div class="layui-form-item">
+                          <label class="layui-form-label">选项B:</label>
+                          <div class="layui-input-block">
+                              <input type="text"  name="optionB" value="<%if(!(question.options==null)){%>${question.options[1].optionText}<%}%>" class="layui-input">
+                              <input type="text" id="optionBCode"   name="optionBCode" value="<%if(!(question.options==null)){%>${question.options[1].optionCode}<%}%>" class="layui-input">
+                          </div>
+                      </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">选项C:</label>
-                <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionC" value="" class="layui-input">
-                </div>
-            </div>
+                      <div class="layui-form-item">
+                          <label class="layui-form-label">选项C:</label>
+                          <div class="layui-input-block">
+                              <input type="text"  name="optionC" value="<%if(!(question.options==null)){%>${question.options[2].optionText}<%}%>" class="layui-input">
+                              <input type="text" id="optionCCode"   name="optionCCode" value="<%if(!(question.options==null)){%>${question.options[2].optionCode}<%}%>" class="layui-input">
+                          </div>
+                      </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">选项D:</label>
-                <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionD" value="" class="layui-input">
-                </div>
-            </div>
+                      <div class="layui-form-item">
+                          <label class="layui-form-label">选项D:</label>
+                          <div class="layui-input-block">
+                              <input type="text"  name="optionD" value="<%if(!(question.options==null)){%>${question.options[3].optionText}<%}%>" class="layui-input">
+                              <input type="text" id="optionDCode"   name="optionDCode" value="<%if(!(question.options==null)){%>${question.options[3].optionCode}<%}%>" class="layui-input">
+                          </div>
+                      </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">正确答案:</label>
-                <div class="layui-input-inline">
-                    <select name="correctAnswer" required>
-                        <option value="">请选择正确答案</option>
-                        <option value="1">A</option>
-                        <option value="2">B</option>
-                        <option value="3">C</option>
-                        <option value="4">D</option>
-                    </select>
-                </div>
-            </div>
+                      <div class="layui-form-item">
+                          <label class="layui-form-label">正确答案:</label>
+                          <div class="layui-input-inline">
+                              <select name="correctAnswer" required>
+                                 <option value="">请选择正确答案</option>
+                                  <option value="<%if(!(question.options==null)){%> question.options[0].id <%}%>" <%if(!(question.options==null)){if(question.options[0].id==question.answerId){%> selected<%}}%>>A</option>
+                                  <option value="<%if(!(question.options==null)){%> question.options[1].id <%}%>" <%if(!(question.options==null)){if(question.options[1].id==question.answerId){%> selected<%}}%>>B</option>
+                                  <option value="<%if(!(question.options==null)){%> question.options[2].id <%}%>" <%if(!(question.options==null)){if(question.options[2].id==question.answerId){%> selected<%}}%>>C</option>
+                                  <option value="<%if(!(question.options==null)){%> question.options[3].id <%}%>" <%if(!(question.options==null)){if(question.options[3].id==question.answerId){%> selected<%}}%>>D</option>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">解析:</label>
-                <div class="layui-input-block">
-                    <textarea name="analysisCode" id="demo"></textarea>
-                </div>
-            </div>
+                              </select>
+                          </div>
+                      </div>
+
+                      <div class="layui-form-item">
+                          <label class="layui-form-label">解析:</label>
+                          <div class="layui-input-block">
+                              <input type="text" name="analysisText" value="${question.analysisText}" class="layui-input">
+                              <textarea name = "analysisCode" id="demo">${question.analysisCode}</textarea>
+                          </div>
+                      </div>
 
             <div class="layui-form-item">
                 <div class="layui-input-block">
@@ -82,9 +88,16 @@
 </form>
 
 <script>
+    flag = 0;
     layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form, layer = layui.layer, laydate = layui.laydate, layedit = layui.layedit;
-         layedit.build('demo'); //建立编辑器
+
+        var editIndex = layedit.build('demo'); //建立编辑器
+        var editIndex1 = layedit.build('optionACode',{height:100}); //建立编辑器
+        var editIndex2 = layedit.build('optionBCode',{height:100}); //建立编辑器
+        var editIndex3 = layedit.build('optionCCode',{height:100}); //建立编辑器
+        var editIndex4 = layedit.build('optionDCode',{height:100}); //建立编辑器
+        var editIndex5 = layedit.build('descriptionCode',{height:100}); //建立编辑器
 
         //日期
         laydate.render({
@@ -110,30 +123,43 @@
             }
         });
 
+        //监听指定开关
+        form.on('switch(switchTest)', function (data) {
+            layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+                offset: '6px'
+            });
+            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+        });
+
         // 监听提交
         form.on('submit(submit)', function (data) {
-            data.field.analysisCode = layedit.getContent(editIndex);
-            data.field.recommendedId = ${recommendedId};
-            layer.alert(JSON.stringify(data.field), {
-                title: '最终的提交信息'
-            });
-            // layer.confirm('确定提交?', {icon: 3, title: '提示'}, function (index) {
-            //     $.ajax({
-            //         type: 'POST',
-            //         url: "/sys/questions/uploadQuestions",
-            //         contentType:"application/json",
-            //         dataType:"JSON",
-            //         data: JSON.stringify(data.field),
-            //         success: function (result) {
-            //             console.log(result);
-            //             layer.alert(result.message, {title: '处理结果!'},
-            //                 function(){
-            //                     window.parent.location.reload();
-            //                 });
-            //         }
-            //     });
-            //     layer.close(index);
-            // });
+             data.field.analysisCode=layedit.getContent(editIndex);
+             data.field.optionACode=layedit.getContent(editIndex1);
+             data.field.optionBCode=layedit.getContent(editIndex2);
+             data.field.optionCCode=layedit.getContent(editIndex3);
+             data.field.optionDCode=layedit.getContent(editIndex4);
+             data.field.descriptionCode=layedit.getContent(editIndex5);
+
+            //layer.alert(JSON.stringify(data.field), {
+            //                 title: '最终的提交信息'
+            //             });
+        layer.confirm('确定提交?', {icon: 3, title: '提示'}, function (index) {
+            $.ajax({
+                type: 'POST',
+                url: "/sys/questions/uploadQuestions",
+                contentType:"application/json",
+                dataType:"JSON",
+                data: JSON.stringify(data.field),
+                success: function (result) {
+                    console.log(result);
+                    layer.alert(result.message, {title: '处理结果!'},
+                     function(){
+                                 window.parent.location.reload();
+                     });
+                 }
+             });
+             layer.close(index);
+         });
             return false;
         });
     });

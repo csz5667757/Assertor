@@ -3,8 +3,10 @@ package com.csz.assertor.sys.web;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.csz.assertor.Exception.OPException;
 import com.csz.assertor.rest.ResultGenerator;
 import com.csz.assertor.rest.response.Response;
+import com.csz.assertor.sys.DTO.RecommendedDTO;
 import com.csz.assertor.sys.DTO.RecommendedQuestionsDTO;
 import com.csz.assertor.sys.DTO.RecommendedQuestionsEditDTO;
 import com.csz.assertor.sys.Vo.EditRecommendedVO;
@@ -23,10 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>
@@ -90,16 +89,17 @@ public class RecommendedController {
     }
 
     @GetMapping("add")
-    public String addRecommended(HttpServletRequest request){
-        Recommended recommended = new Recommended();
-        recommended.setTitle("demo");
-        service.insert(recommended);
-        List<Recommended> recommendedList = service.selectList(new EntityWrapper<>());
-        Recommended recommended1 = recommendedList.get(recommendedList.size() - 1);
-        request.setAttribute("id",recommended1.getId());
+    public String Recommended(HttpServletRequest request){
         List<TechCategory> techCategoryList = tcService.selectList(new EntityWrapper<>());
-        request.setAttribute("tcg",techCategoryList);
+        request.setAttribute("tcgs",techCategoryList);
         return "uploadRecommended.btl";
+    }
+
+    @PostMapping("addRecommended")
+    @ResponseBody
+    public Response addRecommended(@RequestBody RecommendedDTO recommendedDTO)throws OPException {
+        service.addRecommended(recommendedDTO);
+        return ResultGenerator.ok();
     }
 
     @GetMapping("upload")
@@ -162,7 +162,14 @@ public class RecommendedController {
     @GetMapping("edit")
     @ApiOperation("返回套题题目修改视图")
     public String edit(@RequestParam Integer id, HttpServletRequest request){
-        Questions question = qService.selectById(id);
+        //查询套题题目列表
+        EntityWrapper<Questions> wrapper = new EntityWrapper<>();
+        wrapper.eq("recommended_id",id);
+        List<Questions> questionsList = qService.selectList(wrapper);
+
+        //查询套题第一个题目
+        if (questionsList.size()>0){
+        Questions question = questionsList.get(0);
         EntityWrapper<Options> Owrapper = new EntityWrapper<>();
         Owrapper.eq("question_id",question.getId());
         List<Options> options = oService.selectList(Owrapper);
@@ -184,9 +191,13 @@ public class RecommendedController {
             Answer = "A";
         }else if (count==1){Answer="B";} else if (count==2){Answer="C";}else if (count==3){Answer="D";}
         editQuestionVO.setAnswer(Answer);
+            System.out.println(editQuestionVO.toString());
         request.setAttribute("question",editQuestionVO);
+        }
+        //如果没有题目就返回空对象
+        else {request.setAttribute("question",new EditRecommendedVO());}
         request.setAttribute("id",id);
-        return "editQuestions.btl";
+        return "uploadRecommendedQuestions.btl";
     }
 
     @PostMapping("updateRecommendedQuestions")

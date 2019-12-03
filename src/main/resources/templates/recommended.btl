@@ -81,7 +81,7 @@
             var form = layui.form;
 
             form.on('submit(submit)', function(data){
-                //table.reload('demo', {where: data.field});
+                table.reload('demo', {where: data.field});
                 return false;
             });
 
@@ -106,6 +106,7 @@
                     {field: 'title', title: '套题名称', minWidth: 200, sort: true}
                     , {field: 'name', title: '一级专项', width: 200}
                     , {field: 'level', title: '难度', width: 200}
+                    , {field: 'questionNum', title: '题目数', width: 200}
                     , {fixed: 'right', width: 178, align: 'center', toolbar: '#barDemo'}
                 ]]
             });
@@ -135,15 +136,15 @@
 
                     });
                 } else if (obj.event === 'edit') {
-                    var questionId = data.id;
-                    xadmin.open('修改题目','/sys/questions/edit?id='+questionId);
+                    var recommendedId = data.id;
+                    xadmin.open('套题编辑——'+data.title,'/sys/recommended/edit?id='+recommendedId);
                 }
             });
 
             table.on('toolbar(demo)', function (obj) {
                 switch (obj.event) {
                     case 'add':
-                        xadmin.open('上传套题','/sys/recommended/add')
+                        xadmin.open('上传套题','/sys/recommended/add',800,500)
                         break;
                     case 'getCheckLength':
                         var data = checkStatus.data;

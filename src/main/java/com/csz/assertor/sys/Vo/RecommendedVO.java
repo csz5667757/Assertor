@@ -15,5 +15,6 @@ public class RecommendedVO {
     private Float level;
     private String title;
     private String name;
+    private String questionNum;
 
 }

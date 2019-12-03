@@ -7,12 +7,15 @@
         <result column="level" property="level" jdbcType="INTEGER" />
         <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="question_num" property="questionNum" jdbcType="VARCHAR" />
     </resultMap>
 
     <select id="selectRecommended" resultMap="RecommendedVO">
-        select r.`level`,r.title,t.`name`,r.id
+        select r.`level`,r.title,t.`name`,r.id,
+        count(q.id) as  question_num
         from recommended r
         LEFT JOIN tech_category t on r.tech_category_id = t.id
+        LEFT JOIN questions q on q.recommended_id = r.id
         where 1=1
         <if test="level!=null and level!=''">
             AND  r.level = #{level}
@@ -20,5 +23,6 @@
         <if test="techCategoryId!=null and techCategoryId!=''">
             and r.tech_category_id= #{techCategoryId}
         </if>
+        group by r.`level`,r.title,t.`name`,r.id
     </select>
 </mapper>

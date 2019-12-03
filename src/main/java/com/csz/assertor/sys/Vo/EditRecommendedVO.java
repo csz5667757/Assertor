@@ -17,8 +17,11 @@ public class EditRecommendedVO {
     private Integer answerId;
     private String description;
     private List<Options> options;
-    private String analysisCode;
+    private String analysisText;
     private String answer;
 
+    //富文本
+    private String descriptionCode;
+    private String analysisCode;
 
 }
