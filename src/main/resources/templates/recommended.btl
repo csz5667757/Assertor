@@ -61,13 +61,16 @@
     <table id="demo" lay-filter="demo"></table>
 
     <script type="text/html" id="barDemo">
+        <!-- 查看和修改套题题目-->
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-warm" lay-event="add">添加</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
 
     <script type="text/html" id="toolbarDemo">
         <div class="layui-btn-container">
             <button class="layui-btn layui-btn-sm" lay-event="add">上传套题</button>
+            <button class="layui-btn layui-btn-sm" lay-event="">修改套题</button>
         </div>
     </script>
     <script>
@@ -103,11 +106,12 @@
                 }
                 , page: true //开启分页
                 , cols: [[ //表头
-                    {field: 'title', title: '套题名称', minWidth: 200, sort: true}
+                     {type:'radio'}
+                    ,{field: 'title', title: '套题名称', minWidth: 200, sort: true}
                     , {field: 'name', title: '一级专项', width: 200}
                     , {field: 'level', title: '难度', width: 200}
                     , {field: 'questionNum', title: '题目数', width: 200}
-                    , {fixed: 'right', width: 178, align: 'center', toolbar: '#barDemo'}
+                    , {fixed: 'right', width: 300, align: 'center', toolbar: '#barDemo'}
                 ]]
             });
 
@@ -116,7 +120,11 @@
                 var data = obj.data;
                 if (obj.event === 'detail') {
                     layer.msg('ID：' + data.id + ' 的查看操作');
-                } else if (obj.event === 'del') {
+                } else if(obj.event ==='add'){
+                     var recommendedId = data.id;
+                     var questionNum = data.questionNum;
+                     xadmin.open('题目上传——'+data.title,'/sys/recommended/upload?recommendedId='+recommendedId);
+                }else if (obj.event === 'del') {
                     layer.confirm('真的删除"' + data.name + '"么', function (index) {
                         $.ajax({
                             conentType: "json/application,charset=utf-8"
@@ -136,12 +144,20 @@
 
                     });
                 } else if (obj.event === 'edit') {
+                    var questionNum = data.questionNum;
+                    if(questionNum==0){
+                        layer.msg('当前套题题目数为0，请先添加题目！');
+                    }else{
                     var recommendedId = data.id;
-                    xadmin.open('套题编辑——'+data.title,'/sys/recommended/edit?id='+recommendedId);
+                    xadmin.open('套题编辑——'+data.title,'/sys/recommended/edit?id='+recommendedId+'&questionNum='+questionNum);
+                    }
+                    //console.log(data);
                 }
             });
 
+            //头工具栏事件
             table.on('toolbar(demo)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
                 switch (obj.event) {
                     case 'add':
                         xadmin.open('上传套题','/sys/recommended/add',800,500)

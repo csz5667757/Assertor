@@ -18,9 +18,9 @@
             <div class="layui-form-item layui-form-text">
                 <label class="layui-form-label">题目描述</label>
                 <div class="layui-input-block">
-                    <input name="description" id="description" value="${question.description}" placeholder="请输入题目"
+                    <input name="description" id="description" value="" placeholder="请输入题目"
                            class="layui-input"></input>
-                    <textarea name="descriptionCode" id="descriptionCode" placeholder="请输入题目" class="layui-textarea">${question.descriptionCode}</textarea>
+                    <textarea name="descriptionCode" id="descriptionCode" placeholder="请输入题目" class="layui-textarea"></textarea>
                 </div>
             </div>
 
@@ -28,10 +28,10 @@
                 <label class="layui-form-label">选项A:</label>
                 <div class="layui-input-block">
                     <input type="text" name="optionA"
-                           value="<%if(!(question.options==null)){%>${question.options[0].optionText}<%}%>"
+                           value=""
                            class="layui-input">
                     <input type="text" id="optionACode" name="optionACode"
-                           value="<%if(!(question.options==null)){%>${question.options[0].optionCode}<%}%>"
+                           value=""
                            class="layui-input">
                 </div>
             </div>
@@ -40,10 +40,10 @@
                 <label class="layui-form-label">选项B:</label>
                 <div class="layui-input-block">
                     <input type="text" name="optionB"
-                           value="<%if(!(question.options==null)){%>${question.options[1].optionText}<%}%>"
+                           value=""
                            class="layui-input">
                     <input type="text" id="optionBCode" name="optionBCode"
-                           value="<%if(!(question.options==null)){%>${question.options[1].optionCode}<%}%>"
+                           value=""
                            class="layui-input">
                 </div>
             </div>
@@ -52,10 +52,10 @@
                 <label class="layui-form-label">选项C:</label>
                 <div class="layui-input-block">
                     <input type="text" name="optionC"
-                           value="<%if(!(question.options==null)){%>${question.options[2].optionText}<%}%>"
+                           value=""
                            class="layui-input">
                     <input type="text" id="optionCCode" name="optionCCode"
-                           value="<%if(!(question.options==null)){%>${question.options[2].optionCode}<%}%>"
+                           value=""
                            class="layui-input">
                 </div>
             </div>
@@ -64,10 +64,10 @@
                 <label class="layui-form-label">选项D:</label>
                 <div class="layui-input-block">
                     <input type="text" name="optionD"
-                           value="<%if(!(question.options==null)){%>${question.options[3].optionText}<%}%>"
+                           value=""
                            class="layui-input">
                     <input type="text" id="optionDCode" name="optionDCode"
-                           value="<%if(!(question.options==null)){%>${question.options[3].optionCode}<%}%>"
+                           value=""
                            class="layui-input">
                 </div>
             </div>
@@ -78,18 +78,10 @@
                     <select name="correctAnswer" required>
                         <!-- 判断是否为空的题库 -->
                         <option value="">请选择正确答案</option>
-                        <option value="<%if(!(question.options==null)){%> ${question.options[0].id} <%}else{%>1<%}%>"
-                        <%if(!(question.options==null)){if(question.options[0].id==question.answerId){%>
-                        selected<%}}%>>A</option>
-                        <option value="<%if(!(question.options==null)){%> ${question.options[1].id} <%}else{%>2<%}%>"
-                        <%if(!(question.options==null)){if(question.options[1].id==question.answerId){%>
-                        selected<%}}%>>B</option>
-                        <option value="<%if(!(question.options==null)){%> ${question.options[2].id} <%}else{%>3<%}%>"
-                        <%if(!(question.options==null)){if(question.options[2].id==question.answerId){%>
-                        selected<%}}%>>C</option>
-                        <option value="<%if(!(question.options==null)){%> ${question.options[3].id} <%}else{%>4<%}%>"
-                        <%if(!(question.options==null)){if(question.options[3].id==question.answerId){%>
-                        selected<%}}%>>D</option>
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
                     </select>
                 </div>
             </div>
@@ -97,25 +89,15 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">解析:</label>
                 <div class="layui-input-block">
-                    <input type="text" name="analysisText" value="${question.analysisText}" class="layui-input">
-                    <textarea name="analysisCode" id="demo">${question.analysisCode}</textarea>
+                    <input type="text" name="analysisText" value="" class="layui-input">
+                    <textarea name="analysisCode" id="demo"></textarea>
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <div class="layui-progress layui-progress-big" lay-showpercent="true">
-                        <div class="layui-progress-bar" lay-percent="${index}/${questionNum}"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit="" lay-filter="update">修改题目</button>
-                    <button class="layui-btn" lay-submit="" lay-filter="nextQuestion">修改跳转</button>
-                    <button class="layui-btn  layui-btn-normal" lay-submit="" lay-filter="before">上一题</button>
-                    <button class="layui-btn  layui-btn-normal" lay-submit="" lay-filter="next">下一题</button>
+                    <button class="layui-btn" lay-submit="" lay-filter="submit">添加题目</button>
+                    <button class="layui-btn" lay-submit="" lay-filter="">添加并跳转</button>
                     <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                 </div>
             </div>
@@ -168,7 +150,7 @@
         });
 
         // 监听提交
-        form.on('submit(update)', function (data) {
+        form.on('submit(submit)', function (data) {
             //富文本入参
             data.field.analysisCode = layedit.getContent(editIndex);
             data.field.optionACode = layedit.getContent(editIndex1);
@@ -176,15 +158,15 @@
             data.field.optionCCode = layedit.getContent(editIndex3);
             data.field.optionDCode = layedit.getContent(editIndex4);
             data.field.descriptionCode = layedit.getContent(editIndex5);
-            data.field.id =${question.questionId};
+            data.field.recommenedId=${recommendedId};
 
             //layer.alert(JSON.stringify(data.field), {
-            //              title: '最终的提交信息'
-            //         });
+            //               title: '最终的提交信息'
+            //          });
             layer.confirm('确定提交?', {icon: 3, title: '提示'}, function (index) {
                 $.ajax({
                     type: 'POST',
-                    url: "/sys/recommended/updateRecommendedQuestions",
+                    url: "/sys/recommended/uploadRecommendedQuestions",
                     contentType: "application/json",
                     dataType: "JSON",
                     data: JSON.stringify(data.field),
@@ -200,62 +182,6 @@
             });
             return false;
         });
-        form.on('submit(nextQuestion)', function (data) {
-            if (${index}==${questionNum}) {
-                layer.msg('当前为最后一条！');
-            } else {
-                data.field.analysisCode = layedit.getContent(editIndex);
-                data.field.optionACode = layedit.getContent(editIndex1);
-                data.field.optionBCode = layedit.getContent(editIndex2);
-                data.field.optionCCode = layedit.getContent(editIndex3);
-                data.field.optionDCode = layedit.getContent(editIndex4);
-                data.field.descriptionCode = layedit.getContent(editIndex5);
-                data.field.id =${question.questionId};
-
-                //layer.alert(JSON.stringify(data.field), {
-                //              title: '最终的提交信息'
-                //         });
-                layer.confirm('确定提交?', {icon: 3, title: '提示'}, function (index) {
-                    $.ajax({
-                        type: 'POST',
-                        url: "/sys/recommended/updateRecommendedQuestions",
-                        contentType: "application/json",
-                        dataType: "JSON",
-                        data: JSON.stringify(data.field),
-                        success: function (result) {
-                            console.log(result);
-                            layer.alert(result.message, {title: '处理结果!'},
-                                function () {
-                                    window.location.replace('/sys/recommended/edit?id=' +${recommendedId} +'&questionNum=' +${questionNum} +
-                                        '&index=' + (${index}+1));
-                                });
-                        }
-                    });
-                });
-            }
-            return false;
-        });
-
-        form.on('submit(nextQuestion)', function (data) {
-            if (${index}==${questionNum}) {
-                layer.msg('当前为最后一条！');
-            } else {
-                window.location.replace('/sys/recommended/edit?id=' +${recommendedId} +'&questionNum=' +${questionNum} +
-                    '&index=' + (${index}+1));
-            }
-            return false;
-        });
-
-        form.on('submit(before)', function (data) {
-            if (${index}==1) {
-                layer.msg('当前为第一条！');
-            } else {
-                window.location.replace('/sys/recommended/edit?id=' +${recommendedId} +'&questionNum=' +${questionNum} +
-                    '&index=' + (${index}-1));
-            }
-            return false;
-        });
-
     });
 </script>
 </body>

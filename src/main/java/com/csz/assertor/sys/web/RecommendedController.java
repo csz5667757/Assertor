@@ -20,18 +20,19 @@ import com.csz.assertor.sys.service.IQuestionsService;
 import com.csz.assertor.sys.service.IRecommendedService;
 import com.csz.assertor.sys.service.ITechCategoryService;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
- * <p>
- *  前端控制器
- * </p>
- *
+ * 套题上传、修改功能前端控制器
  * @author assertor
  * @since 2019-12-01
  */
@@ -89,6 +90,7 @@ public class RecommendedController {
     }
 
     @GetMapping("add")
+    @ApiOperation("添加套题视图")
     public String Recommended(HttpServletRequest request){
         List<TechCategory> techCategoryList = tcService.selectList(new EntityWrapper<>());
         request.setAttribute("tcgs",techCategoryList);
@@ -96,6 +98,7 @@ public class RecommendedController {
     }
 
     @PostMapping("addRecommended")
+    @ApiOperation("添加套题")
     @ResponseBody
     public Response addRecommended(@RequestBody RecommendedDTO recommendedDTO)throws OPException {
         service.addRecommended(recommendedDTO);
@@ -106,39 +109,71 @@ public class RecommendedController {
     @ApiOperation("返回题目上传套题题目视图")
     public String upload(@RequestParam Integer recommendedId , HttpServletRequest request){
         request.setAttribute("recommendedId",recommendedId);
-        return "uploadRecommendedQuestions.btl";
+        return "addRecommendedQuestions.btl";
     }
 
     @PostMapping("uploadRecommendedQuestions")
     @ResponseBody
     @ApiOperation("上传套题题目")
-    public Response uploadQuestion(@RequestBody RecommendedQuestionsDTO recommendedQuestionsDTO){
+    public Response uploadQuestion(@RequestBody RecommendedQuestionsDTO recommendedQuestionsDTO) throws OPException{
         Questions questions = new Questions();
-        questions.setAnalysisCode(recommendedQuestionsDTO.getAnalysisCode());
-        questions.setDescription(recommendedQuestionsDTO.getDescription());
-        questions.setRecommendedId(recommendedQuestionsDTO.getRecommenedId());
+        if (StringUtils.isNotBlank(recommendedQuestionsDTO.getAnalysisCode())){
+            questions.setAnalysisCode(recommendedQuestionsDTO.getAnalysisCode());
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsDTO.getDescription())){
+            questions.setDescription(recommendedQuestionsDTO.getDescription());
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsDTO.getAnalysisText())){
+            questions.setAnalysisText(recommendedQuestionsDTO.getAnalysisText());
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsDTO.getDescriptionCode())){
+            questions.setCode(recommendedQuestionsDTO.getDescriptionCode());
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsDTO.getRecommenedId().toString())){
+            questions.setRecommendedId(recommendedQuestionsDTO.getRecommenedId());
+        }
         qService.insert(questions);
         EntityWrapper<Questions> wrapper = new EntityWrapper<>();
         List<Questions> questions1 = qService.selectList(wrapper);
         Questions questions2 = questions1.get(questions1.size() - 1);
 
         Options optionsA = new Options();
-        optionsA.setOptionText(recommendedQuestionsDTO.getOptionA());
+        if (StringUtils.isNotBlank(recommendedQuestionsDTO.getOptionA())){
+            optionsA.setOptionText(recommendedQuestionsDTO.getOptionA());
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsDTO.getOptionACode())){
+            optionsA.setOptionCode(recommendedQuestionsDTO.getOptionACode());
+        }
         optionsA.setQuestionId(questions2.getId());
         oService.insert(optionsA);
 
         Options optionsB = new Options();
-        optionsB.setOptionText(recommendedQuestionsDTO.getOptionB());
+        if (StringUtils.isNotBlank(recommendedQuestionsDTO.getOptionB())){
+            optionsB.setOptionText(recommendedQuestionsDTO.getOptionB());
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsDTO.getOptionBCode())){
+            optionsB.setOptionCode(recommendedQuestionsDTO.getOptionBCode());
+        }
         optionsB.setQuestionId(questions2.getId());
         oService.insert(optionsB);
 
         Options optionsC = new Options();
-        optionsC.setOptionText(recommendedQuestionsDTO.getOptionC());
+        if (StringUtils.isNotBlank(recommendedQuestionsDTO.getOptionC())){
+            optionsC.setOptionText(recommendedQuestionsDTO.getOptionC());
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsDTO.getOptionCCode())){
+            optionsC.setOptionCode(recommendedQuestionsDTO.getOptionCCode());
+        }
         optionsC.setQuestionId(questions2.getId());
         oService.insert(optionsC);
 
         Options optionsD = new Options();
-        optionsD.setOptionText(recommendedQuestionsDTO.getOptionD());
+        if (StringUtils.isNotBlank(recommendedQuestionsDTO.getOptionD())){
+            optionsD.setOptionText(recommendedQuestionsDTO.getOptionD());
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsDTO.getOptionDCode())){
+            optionsD.setOptionCode(recommendedQuestionsDTO.getOptionDCode());
+        }
         optionsD.setQuestionId(questions2.getId());
         oService.insert(optionsD);
 
@@ -161,53 +196,89 @@ public class RecommendedController {
 
     @GetMapping("edit")
     @ApiOperation("返回套题题目修改视图")
-    public String edit(@RequestParam Integer id, HttpServletRequest request){
+    public String edit(@RequestParam Integer id,@RequestParam(required = false) Integer index, @RequestParam Integer questionNum, HttpServletRequest request){
+        System.out.println(id);
         //查询套题题目列表
         EntityWrapper<Questions> wrapper = new EntityWrapper<>();
         wrapper.eq("recommended_id",id);
         List<Questions> questionsList = qService.selectList(wrapper);
 
-        //查询套题第一个题目
+        //查询套题第index个题目
         if (questionsList.size()>0){
-        Questions question = questionsList.get(0);
-        EntityWrapper<Options> Owrapper = new EntityWrapper<>();
-        Owrapper.eq("question_id",question.getId());
-        List<Options> options = oService.selectList(Owrapper);
-        EditRecommendedVO editQuestionVO = new EditRecommendedVO();
-        editQuestionVO.setAnalysisCode(question.getAnalysisCode());
-        editQuestionVO.setDescription(question.getDescription());
-        editQuestionVO.setAnswerId(question.getAnswerId());
-        editQuestionVO.setOptions(options);
-        List list = new ArrayList();
-        int count = 0;
-        String Answer=null;
-        for (Options option : options) {
-            if (option.getId()==question.getAnswerId()){
-                break;
+            if (index == null){
+                index = 1;
             }
-            count++;
-        }
-        if (count==0){
-            Answer = "A";
-        }else if (count==1){Answer="B";} else if (count==2){Answer="C";}else if (count==3){Answer="D";}
-        editQuestionVO.setAnswer(Answer);
+            Questions question = questionsList.get(index-1);
+            EntityWrapper<Options> Owrapper = new EntityWrapper<>();
+            Owrapper.eq("question_id",question.getId());
+            List<Options> options = oService.selectList(Owrapper);
+            EditRecommendedVO editQuestionVO = new EditRecommendedVO();
+            editQuestionVO.setQuestionId(question.getId());
+            if (StringUtils.isNotBlank(question.getAnalysisCode())){
+                editQuestionVO.setAnalysisCode(question.getAnalysisCode());
+            }
+            if (StringUtils.isNotBlank(question.getDescription())){
+                editQuestionVO.setDescription(question.getDescription());
+            }
+            editQuestionVO.setAnswerId(question.getAnswerId());
+            editQuestionVO.setOptions(options);
+            if (StringUtils.isNotBlank(question.getCode())){
+                editQuestionVO.setDescriptionCode(question.getCode());
+            }
+            if (StringUtils.isNotBlank(question.getAnalysisText())){
+                editQuestionVO.setAnalysisText(question.getAnalysisText());
+            }
+            List list = new ArrayList();
+            int count = 0;
+            String Answer=null;
+            for (Options option : options) {
+                if (option.getId()==question.getAnswerId()){
+                    break;
+                }
+                count++;
+            }
+            if (count==0){
+                Answer = "A";
+            }else if (count==1){Answer="B";} else if (count==2){Answer="C";}else if (count==3){Answer="D";}
+            editQuestionVO.setAnswer(Answer);
             System.out.println(editQuestionVO.toString());
-        request.setAttribute("question",editQuestionVO);
+            request.setAttribute("question",editQuestionVO);
         }
         //如果没有题目就返回空对象
         else {request.setAttribute("question",new EditRecommendedVO());}
         request.setAttribute("id",id);
+        request.setAttribute("index",index);
+        request.setAttribute("questionNum",questionNum);
+        request.setAttribute("recommendedId",id);
         return "uploadRecommendedQuestions.btl";
     }
+
+
 
     @PostMapping("updateRecommendedQuestions")
     @ResponseBody
     @ApiOperation("修改套题题目")
     public Response updateQuestions(@RequestBody RecommendedQuestionsEditDTO recommendedQuestionsEditDTO){
         Questions questions = qService.selectById(recommendedQuestionsEditDTO.getId());
-        questions.setAnalysisCode(recommendedQuestionsEditDTO.getAnalysisCode());
-        questions.setAnswerId(recommendedQuestionsEditDTO.getCorrectAnswer());
-        questions.setDescription(recommendedQuestionsEditDTO.getDescription());
+        System.out.println(questions);
+        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getAnalysisText())){
+            questions.setAnalysisText(recommendedQuestionsEditDTO.getAnalysisText());
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getCorrectAnswer().toString())){
+            questions.setAnswerId(recommendedQuestionsEditDTO.getCorrectAnswer());
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getDescription())){
+            questions.setDescription(recommendedQuestionsEditDTO.getDescription());
+        }
+        //富文本
+        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getAnalysisCode())){
+            questions.setAnalysisCode(recommendedQuestionsEditDTO.getAnalysisCode());
+        }
+
+        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getDescriptionCode())){
+            questions.setCode(recommendedQuestionsEditDTO.getDescriptionCode());
+        }
+
         EntityWrapper<Questions> questionsEntityWrapper = new EntityWrapper<>();
         questionsEntityWrapper.eq("id",questions.getId());
         qService.update(questions,questionsEntityWrapper);
@@ -216,10 +287,35 @@ public class RecommendedController {
         EntityWrapper<Options> wrapper = new EntityWrapper<>();
         wrapper.eq("question_id",recommendedQuestionsEditDTO.getId());
         List<Options> options = oService.selectList(wrapper);
-        options.get(0).setOptionText(recommendedQuestionsEditDTO.getOptionA());
-        options.get(1).setOptionText(recommendedQuestionsEditDTO.getOptionB());
-        options.get(2).setOptionText(recommendedQuestionsEditDTO.getOptionC());
-        options.get(3).setOptionText(recommendedQuestionsEditDTO.getOptionD());
+        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionA())){
+            options.get(0).setOptionText(recommendedQuestionsEditDTO.getOptionA());
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionB())){
+            options.get(1).setOptionText(recommendedQuestionsEditDTO.getOptionB());
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionC())){
+            options.get(2).setOptionText(recommendedQuestionsEditDTO.getOptionC());
+
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionD())){
+            options.get(3).setOptionText(recommendedQuestionsEditDTO.getOptionD());
+        }
+
+        //富文本
+        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionACode())){
+            options.get(0).setOptionCode(recommendedQuestionsEditDTO.getOptionACode());
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionB())){
+            options.get(1).setOptionCode(recommendedQuestionsEditDTO.getOptionBCode());
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionC())){
+            options.get(2).setOptionCode(recommendedQuestionsEditDTO.getOptionCCode());
+
+        }
+        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionD())){
+            options.get(3).setOptionCode(recommendedQuestionsEditDTO.getOptionDCode());
+        }
+
 
         EntityWrapper<Options> wrapper1 = new EntityWrapper<>();
         wrapper1.eq("id",options.get(0).getId());

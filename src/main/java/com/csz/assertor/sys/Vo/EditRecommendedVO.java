@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 public class EditRecommendedVO {
 
+    private Integer questionId;
     private Integer answerId;
     private String description;
     private List<Options> options;

@@ -106,9 +106,6 @@ public class QuestionsController {
         if (StringUtils.isNotBlank(questionsDTO.getDescriptionCode())){
             questions.setCode(questionsDTO.getDescriptionCode());
         }
-        if (StringUtils.isNotBlank(questionsDTO.getDescriptionCode())){
-            questions.setCode(questionsDTO.getDescriptionCode());
-        }
         questions.setExclusiveId(questionsDTO.getExclusiveId());
         service.insert(questions);
         EntityWrapper<Questions> wrapper = new EntityWrapper<>();
