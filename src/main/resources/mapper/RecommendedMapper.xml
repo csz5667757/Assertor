@@ -4,14 +4,22 @@
 
     <resultMap id="RecommendedVO" type="com.csz.assertor.sys.Vo.RecommendedVO" >
         <result column="id" property="id" jdbcType="INTEGER" />
+        <result column="tid" property="tid" jdbcType="INTEGER" />
         <result column="level" property="level" jdbcType="INTEGER" />
         <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="title" property="title" jdbcType="VARCHAR" />
         <result column="question_num" property="questionNum" jdbcType="VARCHAR" />
     </resultMap>
 
+    <resultMap id="UpdateReommendedVO" type="com.csz.assertor.sys.Vo.UpdateReommendedVO" >
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="tech_category_id" property="techCategoryId" jdbcType="INTEGER" />
+        <result column="level" property="level" jdbcType="INTEGER" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+    </resultMap>
+
     <select id="selectRecommended" resultMap="RecommendedVO">
-        select r.`level`,r.title,t.`name`,r.id,
+        select r.`level`,r.title,t.`name`,r.id,t.id as 'tid',
         count(q.id) as  question_num
         from recommended r
         LEFT JOIN tech_category t on r.tech_category_id = t.id
@@ -24,5 +32,11 @@
             and r.tech_category_id= #{techCategoryId}
         </if>
         group by r.`level`,r.title,t.`name`,r.id
+    </select>
+
+
+    <select id="getOne" parameterType="Integer" resultMap="UpdateReommendedVO">
+        select r.title,r.level,r.tech_category_id,t.name from recommended r left join tech_category t on r.tech_category_id = t.id
+        where r.id = #{recommendedId}
     </select>
 </mapper>

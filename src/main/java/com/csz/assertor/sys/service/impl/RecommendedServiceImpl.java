@@ -1,14 +1,15 @@
 package com.csz.assertor.sys.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.csz.assertor.sys.DTO.RecommendedDTO;
 import com.csz.assertor.sys.Vo.RecommendedVO;
+import com.csz.assertor.sys.Vo.UpdateReommendedVO;
 import com.csz.assertor.sys.entity.Recommended;
 import com.csz.assertor.sys.mapper.RecommendedMapper;
 import com.csz.assertor.sys.service.IRecommendedService;
 import com.csz.assertor.utils.BeanUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,4 +39,20 @@ public class RecommendedServiceImpl extends ServiceImpl<RecommendedMapper, Recom
         mapper.insert(recommended);
     }
 
+    @Override
+    public void updateRecommended(Recommended recommended) {
+        EntityWrapper<Recommended> wrapper = new EntityWrapper<>();
+        wrapper.eq("id",recommended.getId());
+        mapper.update(recommended,wrapper);
+    }
+
+    @Override
+    public void deleteRecommended(Integer recommendedId) {
+        mapper.deleteById(recommendedId);
+    }
+
+    @Override
+    public UpdateReommendedVO getOne(Integer recommendedId) {
+        return mapper.getOne(recommendedId);
+    }
 }

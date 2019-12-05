@@ -20,7 +20,8 @@
                 <div class="layui-input-block">
                     <input name="description" id="description" value="" placeholder="请输入题目"
                            class="layui-input"></input>
-                    <textarea name="descriptionCode" id="descriptionCode" placeholder="请输入题目" class="layui-textarea"></textarea>
+                    <textarea name="descriptionCode" id="descriptionCode" placeholder="请输入题目"
+                              class="layui-textarea"></textarea>
                 </div>
             </div>
 
@@ -97,7 +98,7 @@
             <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button class="layui-btn" lay-submit="" lay-filter="submit">添加题目</button>
-                    <button class="layui-btn" lay-submit="" lay-filter="">添加并跳转</button>
+                    <button class="layui-btn" lay-submit="" lay-filter="submitAndForward">添加并跳转</button>
                     <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                 </div>
             </div>
@@ -158,7 +159,7 @@
             data.field.optionCCode = layedit.getContent(editIndex3);
             data.field.optionDCode = layedit.getContent(editIndex4);
             data.field.descriptionCode = layedit.getContent(editIndex5);
-            data.field.recommenedId=${recommendedId};
+            data.field.recommenedId =${recommendedId};
 
             //layer.alert(JSON.stringify(data.field), {
             //               title: '最终的提交信息'
@@ -179,6 +180,39 @@
                     }
                 });
                 layer.close(index);
+            });
+            return false;
+        });
+
+        //提交并跳转
+        form.on('submit(submitAndForward)', function (data) {
+            //富文本入参
+            data.field.analysisCode = layedit.getContent(editIndex);
+            data.field.optionACode = layedit.getContent(editIndex1);
+            data.field.optionBCode = layedit.getContent(editIndex2);
+            data.field.optionCCode = layedit.getContent(editIndex3);
+            data.field.optionDCode = layedit.getContent(editIndex4);
+            data.field.descriptionCode = layedit.getContent(editIndex5);
+            data.field.recommenedId =${recommendedId};
+
+            //layer.alert(JSON.stringify(data.field), {
+            //               title: '最终的提交信息'
+            //          });
+            layer.confirm('确定提交?', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: "/sys/recommended/uploadRecommendedQuestions",
+                    contentType: "application/json",
+                    dataType: "JSON",
+                    data: JSON.stringify(data.field),
+                    success: function (result) {
+                        console.log(result);
+                        layer.alert(result.message, {title: '处理结果!'},
+                            function () {
+                                window.location.replace('/sys/recommended/upload?recommendedId=${recommendedId}');
+                            });
+                    }
+                });
             });
             return false;
         });

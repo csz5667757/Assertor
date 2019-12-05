@@ -30,9 +30,7 @@
                     <input type="text" name="optionA"
                            value="<%if(!(question.options==null)){%>${question.options[0].optionText}<%}%>"
                            class="layui-input">
-                    <input type="text" id="optionACode" name="optionACode"
-                           value="<%if(!(question.options==null)){%>${question.options[0].optionCode}<%}%>"
-                           class="layui-input">
+                    <textarea  id="optionACode" name="optionACode"  class="layui-textarea"><%if(!(question.options==null)){%>${question.options[0].optionCode}<%}%></textarea>
                 </div>
             </div>
 
@@ -42,9 +40,7 @@
                     <input type="text" name="optionB"
                            value="<%if(!(question.options==null)){%>${question.options[1].optionText}<%}%>"
                            class="layui-input">
-                    <input type="text" id="optionBCode" name="optionBCode"
-                           value="<%if(!(question.options==null)){%>${question.options[1].optionCode}<%}%>"
-                           class="layui-input">
+                    <textarea    id="optionBCode" name="optionBCode"  class="layui-textarea"><%if(!(question.options==null)){%>${question.options[1].optionCode}<%}%></textarea>
                 </div>
             </div>
 
@@ -54,9 +50,7 @@
                     <input type="text" name="optionC"
                            value="<%if(!(question.options==null)){%>${question.options[2].optionText}<%}%>"
                            class="layui-input">
-                    <input type="text" id="optionCCode" name="optionCCode"
-                           value="<%if(!(question.options==null)){%>${question.options[2].optionCode}<%}%>"
-                           class="layui-input">
+                    <textarea   id="optionCCode" name="optionCCode"  class="layui-textarea"><%if(!(question.options==null)){%>${question.options[2].optionCode}<%}%></textarea>
                 </div>
             </div>
 
@@ -66,9 +60,7 @@
                     <input type="text" name="optionD"
                            value="<%if(!(question.options==null)){%>${question.options[3].optionText}<%}%>"
                            class="layui-input">
-                    <input type="text" id="optionDCode" name="optionDCode"
-                           value="<%if(!(question.options==null)){%>${question.options[3].optionCode}<%}%>"
-                           class="layui-input">
+                    <textarea    id="optionDCode" name="optionDCode"   class="layui-textarea"><%if(!(question.options==null)){%>${question.options[3].optionCode}<%}%></textarea>
                 </div>
             </div>
 
@@ -226,8 +218,7 @@
                             console.log(result);
                             layer.alert(result.message, {title: '处理结果!'},
                                 function () {
-                                    window.location.replace('/sys/recommended/edit?id=' +${recommendedId} +'&questionNum=' +${questionNum} +
-                                        '&index=' + (${index}+1));
+                                    window.location.replace('/sys/recommended/edit?id=' +${recommendedId} +'&questionNum=' +${questionNum} +'&index=' + (${index}+1));
                                 });
                         }
                     });
@@ -236,12 +227,11 @@
             return false;
         });
 
-        form.on('submit(nextQuestion)', function (data) {
+        form.on('submit(next)', function (data) {
             if (${index}==${questionNum}) {
                 layer.msg('当前为最后一条！');
             } else {
-                window.location.replace('/sys/recommended/edit?id=' +${recommendedId} +'&questionNum=' +${questionNum} +
-                    '&index=' + (${index}+1));
+                window.location.replace('/sys/recommended/edit?id=' +${recommendedId} +'&questionNum=' +${questionNum} +'&index=' + (${index}+1));
             }
             return false;
         });
@@ -250,8 +240,7 @@
             if (${index}==1) {
                 layer.msg('当前为第一条！');
             } else {
-                window.location.replace('/sys/recommended/edit?id=' +${recommendedId} +'&questionNum=' +${questionNum} +
-                    '&index=' + (${index}-1));
+                window.location.replace('/sys/recommended/edit?id=' +${recommendedId} +'&questionNum=' +${questionNum} +'&index=' + (${index}-1));
             }
             return false;
         });

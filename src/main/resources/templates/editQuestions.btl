@@ -51,16 +51,16 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">选项A:</label>
                 <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionA" value="${question.options[0].optionText}" class="layui-input">
-                    <input type="text" id="optionACode"   name="optionACode" value="${question.options[0].optionCode}" class="layui-input">
+                    <input type="text"  name="optionA" value="${question.options[0].optionText}" class="layui-input">
+                    <textarea  id="optionACode"   name="optionACode"  class="layui-textarea" >${question.options[0].optionCode}</textarea>
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">选项B:</label>
                 <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionB" value="${question.options[1].optionText}" class="layui-input">
-                    <input type="text" id="optionBCode"   name="optionBCode" value="${question.options[1].optionCode}" class="layui-input">
+                    <input type="text"  name="optionB" value="${question.options[1].optionText}" class="layui-input">
+                    <textarea id="optionBCode"   name="optionBCode"  class="layui-textarea" >${question.options[1].optionCode}</textarea>
                 </div>
             </div>
 
@@ -68,7 +68,7 @@
                 <label class="layui-form-label">选项C:</label>
                 <div class="layui-input-block">
                     <input type="text" lay-verify="required" name="optionC" value="${question.options[2].optionText}" class="layui-input">
-                    <input type="text" id="optionCCode"   name="optionCCode" value="${question.options[2].optionCode}" class="layui-input">
+                    <textarea  id="optionCCode"   name="optionCCode"  class="layui-textarea">${question.options[2].optionCode}</textarea>
                 </div>
             </div>
 
@@ -76,7 +76,7 @@
                 <label class="layui-form-label">选项D:</label>
                 <div class="layui-input-block">
                     <input type="text" lay-verify="required" name="optionD" value="${question.options[3].optionText}" class="layui-input">
-                    <input type="text" id="optionDCode"   name="optionDCode" value="${question.options[3].optionCode}" class="layui-input">
+                    <textarea  id="optionDCode"   name="optionDCode"  class="layui-textarea">${question.options[3].optionCode}</textarea>
                 </div>
             </div>
 

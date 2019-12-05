@@ -12,6 +12,8 @@ import lombok.Data;
 public class RecommendedVO {
 
     private Integer id ;
+    //类目id
+    private Integer tid ;
     private Float level;
     private String title;
     private String name;

@@ -9,8 +9,10 @@ import com.csz.assertor.rest.response.Response;
 import com.csz.assertor.sys.DTO.RecommendedDTO;
 import com.csz.assertor.sys.DTO.RecommendedQuestionsDTO;
 import com.csz.assertor.sys.DTO.RecommendedQuestionsEditDTO;
+import com.csz.assertor.sys.DTO.UpdateRecommendDTO;
 import com.csz.assertor.sys.Vo.EditRecommendedVO;
 import com.csz.assertor.sys.Vo.RecommendedVO;
+import com.csz.assertor.sys.Vo.UpdateReommendedVO;
 import com.csz.assertor.sys.entity.Options;
 import com.csz.assertor.sys.entity.Questions;
 import com.csz.assertor.sys.entity.Recommended;
@@ -19,6 +21,7 @@ import com.csz.assertor.sys.service.IOptionsService;
 import com.csz.assertor.sys.service.IQuestionsService;
 import com.csz.assertor.sys.service.IRecommendedService;
 import com.csz.assertor.sys.service.ITechCategoryService;
+import com.csz.assertor.utils.BeanUtil;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -336,4 +339,51 @@ public class RecommendedController {
         return ResultGenerator.ok();
     }
 
+    @GetMapping("update")
+    @ResponseBody
+    public Response update(@RequestBody Recommended recommended) throws OPException{
+        service.updateRecommended(recommended);
+        return ResultGenerator.ok();
+    }
+
+    @GetMapping("editRecommended")
+    @ApiOperation("修改套题视图")
+    public String editRecommended(@RequestParam Integer recommendedId,HttpServletRequest request){
+        UpdateReommendedVO reommendedVO = service.getOne(recommendedId);
+        List<TechCategory> techCategories = tcService.selectList(new EntityWrapper<>());
+        request.setAttribute("tcgs",techCategories);
+        request.setAttribute("recommended",reommendedVO);
+        request.setAttribute("recommendedId",recommendedId);
+        return "editRecommended.btl";
+    }
+
+    @PostMapping("updateRecommended")
+    @ApiOperation("修改套题信息")
+    @ResponseBody
+    public Response updateRecommended(@RequestBody UpdateRecommendDTO updateRecommendDTO) throws OPException{
+        Recommended recommended = BeanUtil.copyBean(updateRecommendDTO, Recommended.class);
+        recommended.setTechCategoryId(updateRecommendDTO.getTid());
+        service.updateRecommended(recommended);
+        return ResultGenerator.ok();
+    }
+
+    @GetMapping("deleteRecommended")
+    @ResponseBody
+    public Response deleteRecommended(@RequestParam Integer recommendedId) throws OPException{
+        EntityWrapper<Questions> wrapper = new EntityWrapper<>();
+        wrapper.eq("recommended_id",recommendedId);
+        //删除选项
+        //先查出所有题目
+        List<Questions> questions = qService.selectList(wrapper);
+        for (Questions question : questions) {
+            EntityWrapper<Options> wrapper1 = new EntityWrapper<>();
+            wrapper1.eq("question_id",question.getId());
+            oService.delete(wrapper1);
+        }
+        //删除题目
+        qService.delete(wrapper);
+        //删除套题
+        service.deleteRecommended(recommendedId);
+        return ResultGenerator.ok();
+    }
 }

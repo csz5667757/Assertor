@@ -1,9 +1,11 @@
 package com.csz.assertor;
 
+import com.csz.assertor.Interceptor.LoginInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
@@ -24,9 +26,13 @@ public class AssertorApplication extends WebMvcConfigurationSupport {
 		                .addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX + "/static/");
 				registry.addResourceHandler("/static/lib/layui/**")
 				.addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX + "/static/lib/layui/");
-
 		         super.addResourceHandlers(registry);
 		    }
 
+	@Override
+	protected void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**").excludePathPatterns("/login","/sys/user/register","/static/**");
+		super.addInterceptors(registry);
+	}
 }
 

@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 /**
  * @author Assertor
@@ -16,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ViewController {
 
 
-    @RequestMapping("/login")
+    @RequestMapping("/logins")
     public String Login(){
         return "login.btl";
     }
@@ -38,19 +41,15 @@ public class ViewController {
         return "techCategory.btl";
     }
 
-    @GetMapping("logins")
+    @GetMapping("/login")
     public String logins(){
         return "logins.btl";
     }
 
     @GetMapping("indexs")
-    public String indexs(){
+    public String indexs(@RequestParam String nickname,HttpServletRequest request){
+        request.setAttribute("nickname",nickname);
         return "indexs.btl";
-    }
-
-    @GetMapping("index")
-    public String index(){
-        return "index.btl";
     }
 
     @GetMapping("users")
@@ -61,6 +60,13 @@ public class ViewController {
     @GetMapping("categorys")
     public String categorys(){
         return "techCategorys.btl";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+        session.setAttribute("logined","logout");
+        return "logins.btl";
     }
 
 }

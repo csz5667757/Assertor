@@ -1,6 +1,6 @@
 package com.csz.assertor.configuration;
 
-import com.csz.assertor.Interceptor.ResourceInterceptor;
+import com.csz.assertor.Interceptor.LoginInterceptor;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -27,19 +27,19 @@ public class Swagger2Configurer implements WebMvcConfigurer {
 
 //    @Override
 //    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new ResourceInterceptor()).addPathPatterns("/**").excludePathPatterns("/static/");
+//        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**").excludePathPatterns("/static/");
 //    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
-        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-        registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-        registry.addResourceHandler("/static/css/**").addResourceLocations("classpath:/static/css/");
-        registry.addResourceHandler("/static/fonts/**").addResourceLocations("classpath:/static/fonts/");
-        registry.addResourceHandler("/static/images/**").addResourceLocations("classpath:/static/images/");
-        registry.addResourceHandler("/static/lib/**").addResourceLocations("classpath:/static/lib/");
-        registry.addResourceHandler("/static/js/**").addResourceLocations("classpath:/static/js/");
+//        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+//        registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
+//        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+//        registry.addResourceHandler("/static/css/**").addResourceLocations("classpath:/static/css/");
+//        registry.addResourceHandler("/static/fonts/**").addResourceLocations("classpath:/static/fonts/");
+//        registry.addResourceHandler("/static/images/**").addResourceLocations("classpath:/static/images/");
+//        registry.addResourceHandler("/static/lib/**").addResourceLocations("classpath:/static/lib/");
+//        registry.addResourceHandler("/static/js/**").addResourceLocations("classpath:/static/js/");
 
     }
 
@@ -64,7 +64,7 @@ public class Swagger2Configurer implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new ResourceInterceptor())
+        registry.addInterceptor(new LoginInterceptor())
                 .excludePathPatterns("/**");
     }
 }

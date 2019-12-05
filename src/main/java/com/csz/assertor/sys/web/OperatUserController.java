@@ -30,7 +30,6 @@ import java.io.IOException;
  */
 
 @Controller
-@RequestMapping("/sys/user")
 @Api("运营用户管理")
 public class OperatUserController {
     @Autowired
@@ -75,8 +74,12 @@ public class OperatUserController {
         String salt = user.getSalt();
         if (!DigestUtils.md5DigestAsHex((password + salt).getBytes()).equals(user.getPassword())) {
             throw new OPException("用户名或密码错误！");
+        }else{
+            request.getSession().setAttribute("logined","success");
         }
         request.setAttribute("nickname",user.getNickname());
         return "indexs.btl";
     }
+
+
 }

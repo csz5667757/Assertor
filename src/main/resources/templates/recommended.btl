@@ -70,7 +70,8 @@
     <script type="text/html" id="toolbarDemo">
         <div class="layui-btn-container">
             <button class="layui-btn layui-btn-sm" lay-event="add">上传套题</button>
-            <button class="layui-btn layui-btn-sm" lay-event="">修改套题</button>
+            <button class="layui-btn layui-btn-sm" lay-event="update">修改套题</button>
+             <button class="layui-btn layui-btn-small"  onclick="location.reload()" >刷新</button>
         </div>
     </script>
     <script>
@@ -122,22 +123,20 @@
                     layer.msg('ID：' + data.id + ' 的查看操作');
                 } else if(obj.event ==='add'){
                      var recommendedId = data.id;
-                     var questionNum = data.questionNum;
                      xadmin.open('题目上传——'+data.title,'/sys/recommended/upload?recommendedId='+recommendedId);
                 }else if (obj.event === 'del') {
-                    layer.confirm('真的删除"' + data.name + '"么', function (index) {
+                    layer.confirm('真的删除"' + data.title + '"么', function (index) {
                         $.ajax({
                             conentType: "json/application,charset=utf-8"
-                            , url: "/sys/tech/delete"
+                            , url: "/sys/recommended/deleteRecommended"
                             , dataType: "json"
-                            , type: "POST"
+                            , type: "GET"
                             , data: {
-                                id: data.id
+                                recommendedId: data.id
                             },
                             success: function (result) {
                                 layer.alert(result.message, {title: '处理结果!'},function(){
-                                    layer.close(index);
-                                    table.reload("demo");
+                                    window.parent.location.reload();
                                 });
                             }
                         })
@@ -160,11 +159,17 @@
             var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
                 switch (obj.event) {
                     case 'add':
-                        xadmin.open('上传套题','/sys/recommended/add',800,500)
+                        xadmin.open('添加套题','/sys/recommended/add',800,500)
                         break;
-                    case 'getCheckLength':
+                    case 'update':
                         var data = checkStatus.data;
-                        layer.msg('选中了：' + data.length + ' 个');
+                        console.log(data);
+                        if(data.length==0){
+                            layer.msg("请选择一个套题");
+                        }
+                        else{
+                         xadmin.open('修改套题','/sys/recommended/editRecommended?recommendedId='+data[0].id,800,500)
+                        }
                         break;
                     case 'isAll':
                         layer.msg(checkStatus.isAll ? '全选' : '未全选');
