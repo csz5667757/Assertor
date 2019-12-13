@@ -15,20 +15,17 @@
 		q.id ,
 		q.description ,
 		eg.title  ,
-		e.exclusive_title,
-		o.option_code ,
-		o.option_text
+		e.exclusive_title
 		FROM
-			questions q
+		questions q
 		LEFT JOIN `exclusive` e ON q.exclusive_id = e.id
 		LEFT JOIN exclusive_group eg ON e.category_group_id = eg.id
-		LEFT JOIN `options` o ON q.id = o.question_id
-		WHERE q.answer_id = o.id
+		WHERE q.exclusive_id > 0
 		<if test="categoryGroupId != null and categoryGroupId !='' ">
 			AND e.category_group_id = #{categoryGroupId}
 		</if>
 		<if test="exclusiveId!=null and exclusiveId!=''">
-			AND e.id = #{exclusiveId}
-		</if>
+		AND e.id = #{exclusiveId}
+	</if>
     </select>
 </mapper>

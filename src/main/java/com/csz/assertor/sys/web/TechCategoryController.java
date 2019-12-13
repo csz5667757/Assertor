@@ -65,6 +65,6 @@ public class TechCategoryController {
         if (!Objects.isNull(selectOne)){
             service.deleteById(id);
         }
-        return ResultGenerator.ok();
+        return ResultGenerator.ok("删除成功！");
     }
 }

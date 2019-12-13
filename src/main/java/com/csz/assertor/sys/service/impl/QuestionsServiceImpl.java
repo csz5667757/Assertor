@@ -46,8 +46,10 @@ public class QuestionsServiceImpl extends ServiceImpl<QuestionsMapper, Questions
             wrapper.eq("question_id",questionId);
             List<Options> options = oMapper.selectList(wrapper);
             for (int i=0;i<4;i++){
-                if (StringUtils.isNotBlank(options.get(i).getId().toString())){
-                    oMapper.deleteById(options.get(i).getId());
+                if (options.size()>0){
+                    if (StringUtils.isNotBlank(options.get(i).getId().toString())){
+                        oMapper.deleteById(options.get(i).getId());
+                    }
                 }
             }
         }

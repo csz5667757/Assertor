@@ -26,7 +26,7 @@
 
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="add">新增首页类目</button>
+        <button class="layui-btn layui-btn-sm" lay-event="add">新增套题类目</button>
     </div>
 </script>
 <script>
@@ -55,7 +55,7 @@
             , cols: [[ //表头
                 {field: 'id', title: '序号', width: 200, sort: true}
                 , {field: 'name', title: '类型', minWidth: 400}
-                , {fixed: 'right', width: 178, align: 'center', toolbar: '#barDemo'}
+                , {fixed: 'right', width: 300, align: 'center', toolbar: '#barDemo'}
             ]]
              ,done: function (res, curr, count) {
                                  $(".layui-table-box").find("[data-field='id']").css("display","none");
@@ -70,7 +70,7 @@
             if (obj.event === 'detail') {
                 layer.msg('ID：' + data.id + ' 的查看操作');
             } else if (obj.event === 'del') {
-                layer.confirm('真的删除"' + data.name + '"么', function (index) {
+                layer.confirm('确定删除"' + data.name + '"么？', function (index) {
                     $.ajax({
                         conentType: "json/application,charset=utf-8"
                         , url: "/sys/tech/delete"
@@ -95,9 +95,6 @@
                     , btn: null
                     , area: '500px;'
                     , content: "<form class='layui-form' action='/sys/tech/update' method='post'>" +
-                        "<div class='layui-form-item'>" +
-                        "<label  class='layui-form-label' >序号：</label>" + "<div class='layui-input-block'>" +
-                        "<input class='layui-input' name='id' readonly " + "value=" + JSON.stringify(data.id) + "></div></div>" +
 
                         "<div class='layui-form-item'>" +
                         "<label class='layui-form-label' style=''>类目：</label>" + "<div class='layui-input-block'>" +

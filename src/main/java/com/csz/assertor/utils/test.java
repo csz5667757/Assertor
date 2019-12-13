@@ -1,17 +1,21 @@
 package com.csz.assertor.utils;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * @author Assertor
  * @Description
  * @Date：2019/11/26
  */
-public class test {
+public abstract class test {
 
-    public static final String password = "123456";
+//    public static final String password = "123456";
 
-    @SuppressWarnings("static-access")
+    public void test(){
+
+    }
+
+    public abstract void tests();
+
+//    @SuppressWarnings("static-access")
     public static void main(String[] args) {
 //        String a = MD5Util.string2MD5(password);
 //        System.out.println(a);
@@ -21,10 +25,10 @@ public class test {
 //
 //        String b = convertMD5(convertMD5(a));
 //        System.out.println(b);
-        String a = null;
+//        String a = null;
 //        String b = "123";
 //        System.out.println(a.equals(b));
-        boolean blank = StringUtils.isNotBlank(a);
-        System.out.println(blank);
+//        boolean blank = StringUtils.isNotBlank(a);
+//        System.out.println(blank);
     }
 }

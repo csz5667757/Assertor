@@ -65,9 +65,9 @@
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">正确答案:</label>
+                <label class="layui-form-label layui-required">正确答案:</label>
                 <div class="layui-input-inline">
-                    <select name="correctAnswer" required>
+                    <select name="correctAnswer" lay-verify="required">
                         <!-- 判断是否为空的题库 -->
                         <option value="">请选择正确答案</option>
                         <option value="<%if(!(question.options==null)){%> ${question.options[0].id} <%}else{%>1<%}%>"
@@ -186,7 +186,10 @@
                             function () {
                                 window.parent.location.reload();
                             });
-                    }
+                    },
+                     error:function(result){
+                         layer.alert(result.responseJSON.message, {title: '处理结果!'});
+                     }
                 });
                 layer.close(index);
             });
@@ -220,6 +223,9 @@
                                 function () {
                                     window.location.replace('/sys/recommended/edit?id=' +${recommendedId} +'&questionNum=' +${questionNum} +'&index=' + (${index}+1));
                                 });
+                        },
+                        error:function(result){
+                            layer.alert(result.responseJSON.message, {title: '处理结果!'});
                         }
                     });
                 });
@@ -247,5 +253,15 @@
 
     });
 </script>
+<style>
+.layui-form-label.layui-required:after{
+        content:"*";
+        font-size:20px;
+        color:red;
+        position: absolute;
+        top:10px;
+        left:25px;
+    }
+</style>
 </body>
 </html>

@@ -16,7 +16,7 @@
     <div class="layui-fluid">
         <div class="layui-row">
             <div class="layui-form-item">
-                <label class="layui-form-label">一级专项</label>
+                <label class="layui-form-label layui-required">一级专项</label>
                 <div class="layui-input-inline">
                     <select lay-filter="cgFilter"  lay-verify="required"  lay-search>
                         <%
@@ -31,7 +31,7 @@
 
                 </div>
 
-                <label class="layui-form-label">二级专项</label>
+                <label class="layui-form-label layui-required">二级专项</label>
                 <div class="layui-input-inline">
                     <select name="exclusiveId" id="exclusiveId"   lay-verify="required"  lay-filter="eFilter" lay-search>
                         <option value="${question.exclusiveId}">${question.exclusiveTitle}</option>
@@ -67,7 +67,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">选项C:</label>
                 <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionC" value="${question.options[2].optionText}" class="layui-input">
+                    <input type="text"  name="optionC" value="${question.options[2].optionText}" class="layui-input">
                     <textarea  id="optionCCode"   name="optionCCode"  class="layui-textarea">${question.options[2].optionCode}</textarea>
                 </div>
             </div>
@@ -75,16 +75,15 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">选项D:</label>
                 <div class="layui-input-block">
-                    <input type="text" lay-verify="required" name="optionD" value="${question.options[3].optionText}" class="layui-input">
+                    <input type="text"  name="optionD" value="${question.options[3].optionText}" class="layui-input">
                     <textarea  id="optionDCode"   name="optionDCode"  class="layui-textarea">${question.options[3].optionCode}</textarea>
                 </div>
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">正确答案:</label>
+                <label class="layui-form-label layui-required">正确答案:</label>
                 <div class="layui-input-inline">
-                    <select name="correctAnswer" required>
-
+                    <select name="correctAnswer" lay-verify="required">
                         <option value="${question.options[0].id}" <%if(question.options[0].id==question.answerId){%> selected<%}%>>A</option>
                         <option value="${question.options[1].id}" <%if(question.options[1].id==question.answerId){%> selected<%}%>>B</option>
                         <option value="${question.options[2].id}" <%if(question.options[2].id==question.answerId){%> selected<%}%>>C</option>
@@ -209,5 +208,15 @@
         });
     });
 </script>
+<style>
+.layui-form-label.layui-required:after{
+        content:"*";
+        font-size:20px;
+        color:red;
+        position: absolute;
+        top:10px;
+        left:25px;
+    }
+</style>
 </body>
 </html>

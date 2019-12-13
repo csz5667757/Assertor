@@ -84,19 +84,24 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('首次登陆类目管理','../../categorys')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>首次登陆类目管理</cite></a>
-                            </li>
-                            <li>
                                 <a onclick="xadmin.add_tab('题目管理','sys/questions/page')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>题目管理</cite></a>
                             </li>
-                                <li>
-                                    <a onclick="xadmin.add_tab('套题管理','sys/recommended/page')">
+                            <li>
+                                <a onclick="xadmin.add_tab('套题管理','sys/recommended/page')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>套题管理</cite></a>
+                            </li>
+                              <li>
+                                    <a onclick="xadmin.add_tab('套题类目管理','../../categorys')">
                                         <i class="iconfont">&#xe6a7;</i>
-                                        <cite>套题管理</cite></a>
+                                        <cite>套题类目管理</cite></a>
+                                </li>
+                                <li>
+                                    <a onclick="xadmin.add_tab('专项类目管理','../../exclusive')">
+                                        <i class="iconfont">&#xe6a7;</i>
+                                        <cite>专项类目管理</cite></a>
                                 </li>
                         </ul>
                     </li>

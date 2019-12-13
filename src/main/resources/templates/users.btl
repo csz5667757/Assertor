@@ -22,7 +22,7 @@
 
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="add">新增首页类目</button>
+        <!-- <button class="layui-btn layui-btn-sm" lay-event="add">新增首页类目</button>-->
     </div>
 </script>
 <script>

@@ -45,6 +45,10 @@
                             <button class="layui-btn-sm" lay-submit="" lay-filter="submit"><i
                                     class="layui-icon">&#xe615;</i></button>
                         </div>
+
+                         <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+                                                                                                    <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+                                                                                                </a>
                     </form>
                 </div>
 
@@ -98,7 +102,7 @@
             });
 
             form.on('submit(submit)', function(data){
-                table.reload('demo', {where: data.field});
+                table.reload('demo', {where: data.field, page: {curr: 1}});
                 return false;
             });
 
@@ -123,7 +127,6 @@
                     {field: 'description', title: '题目', minWidth: 300, sort: true}
                     , {field: 'title', title: '一级专项', width: 200}
                     , {field: 'exclusiveTitle', title: '二级专项', width: 200}
-                    , {field: 'optionText', title: '正确答案内容', minWidth: 200}
                     , {fixed: 'right', width: 178, align: 'center', toolbar: '#barDemo'}
                 ]]
             });
@@ -135,7 +138,7 @@
                             layer.msg('ID：' + data.id + ' 的查看操作');
                         } else if (obj.event === 'del') {
                             console.log(data);
-                            layer.confirm('真的删除"' + data.description + '"么', function (index) {
+                            layer.confirm('确定删除"' + data.description + '"么？', function (index) {
                                 $.ajax({
                                     conentType: "json/application,charset=utf-8"
                                     , url: "/sys/questions/delete"

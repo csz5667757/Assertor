@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.csz.assertor.sys.mapper.ExclusiveMapper">
+    <resultMap id="Exclusive" type="com.csz.assertor.sys.Vo.ExclusiveVO">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="category_group_id" property="pid" jdbcType="INTEGER"/>
+        <result column="exclusive_title" property="title" jdbcType="VARCHAR"/>
+    </resultMap>
 
+    <select id="selectExclusive" resultMap="Exclusive">
+        select * from exclusive
+    </select>
 </mapper>

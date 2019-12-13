@@ -16,7 +16,7 @@
     <div class="layui-fluid">
         <div class="layui-row">
             <div class="layui-form-item">
-                <label class="layui-form-label">一级专项</label>
+                <label class="layui-form-label  layui-required">一级专项</label>
                 <div class="layui-input-inline">
                     <select lay-filter="cgFilter"  lay-verify="required"  lay-search>
                         <option value="">直接选择或搜索选择</option>
@@ -30,7 +30,7 @@
                     </select>
                 </div>
 
-                <label class="layui-form-label">二级专项</label>
+                <label class="layui-form-label layui-required">二级专项</label>
                 <div class="layui-input-inline">
                     <select name="exclusiveId" id="exclusiveId"  lay-verify="required"  lay-filter="eFilter" lay-search>
                     </select>
@@ -80,9 +80,9 @@
             </div>
 
                   <div class="layui-form-item">
-                                        <label class="layui-form-label">正确答案:</label>
+                                        <label class="layui-form-label layui-required">正确答案:</label>
                                         <div class="layui-input-inline">
-                                        <select name="correctAnswer" required>
+                                        <select name="correctAnswer" lay-verify="required">
                                         <option value="">请选择正确答案</option>
                                         <option value="1">A</option>
                                         <option value="2">B</option>
@@ -111,7 +111,6 @@
 </form>
 
 <script>
-    flag = 0;
     layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form, layer = layui.layer, laydate = layui.laydate, layedit = layui.layedit;
 
@@ -203,9 +202,12 @@
                     console.log(result);
                     layer.alert(result.message, {title: '处理结果!'},
                      function(){
-                                 window.parent.location.reload();
+                            window.parent.location.reload();
                      });
-                 }
+                 },
+                error: function (result){
+                              layer.alert(result.responseJSON.message, {title: '处理结果!'});
+                               }
              });
              layer.close(index);
          });
@@ -213,5 +215,15 @@
         });
     });
 </script>
+<style>
+.layui-form-label.layui-required:after{
+        content:"*";
+        font-size:20px;
+        color:red;
+        position: absolute;
+        top:10px;
+        left:25px;
+    }
+</style>
 </body>
 </html>

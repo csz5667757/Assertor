@@ -26,6 +26,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -105,7 +106,7 @@ public class RecommendedController {
     @ResponseBody
     public Response addRecommended(@RequestBody RecommendedDTO recommendedDTO)throws OPException {
         service.addRecommended(recommendedDTO);
-        return ResultGenerator.ok();
+        return ResultGenerator.ok("添加成功！");
     }
 
     @GetMapping("upload")
@@ -118,6 +119,7 @@ public class RecommendedController {
     @PostMapping("uploadRecommendedQuestions")
     @ResponseBody
     @ApiOperation("上传套题题目")
+    @Transactional
     public Response uploadQuestion(@RequestBody RecommendedQuestionsDTO recommendedQuestionsDTO) throws OPException{
         Questions questions = new Questions();
         if (StringUtils.isNotBlank(recommendedQuestionsDTO.getAnalysisCode())){
@@ -182,6 +184,10 @@ public class RecommendedController {
 
         List<Options> options = oService.selectList(new EntityWrapper<Options>());
 
+        if (recommendedQuestionsDTO.getCorrectAnswer()==null){
+            throw new OPException("未输入正确答案，请重新输入！");
+        }
+
         if (recommendedQuestionsDTO.getCorrectAnswer()==4){
             questions2.setAnswerId(options.get(options.size()-1).getId());
         }else if (recommendedQuestionsDTO.getCorrectAnswer()==3){
@@ -194,7 +200,7 @@ public class RecommendedController {
         EntityWrapper<Questions> wrapper1 = new EntityWrapper<>();
         wrapper1.eq("id",questions2.getId());
         qService.update(questions2,wrapper1);
-        return  ResultGenerator.ok();
+        return  ResultGenerator.ok("上传成功！");
     }
 
     @GetMapping("edit")
@@ -261,7 +267,8 @@ public class RecommendedController {
     @PostMapping("updateRecommendedQuestions")
     @ResponseBody
     @ApiOperation("修改套题题目")
-    public Response updateQuestions(@RequestBody RecommendedQuestionsEditDTO recommendedQuestionsEditDTO){
+    @Transactional
+    public Response updateQuestions(@RequestBody RecommendedQuestionsEditDTO recommendedQuestionsEditDTO) throws OPException{
         Questions questions = qService.selectById(recommendedQuestionsEditDTO.getId());
         System.out.println(questions);
         if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getAnalysisText())){
@@ -336,14 +343,14 @@ public class RecommendedController {
         wrapper4.eq("id",options.get(3).getId());
         oService.update(options.get(3),wrapper4);
 
-        return ResultGenerator.ok();
+        return ResultGenerator.ok("修改成功！");
     }
 
     @GetMapping("update")
     @ResponseBody
     public Response update(@RequestBody Recommended recommended) throws OPException{
         service.updateRecommended(recommended);
-        return ResultGenerator.ok();
+        return ResultGenerator.ok("修改成功！");
     }
 
     @GetMapping("editRecommended")
@@ -364,7 +371,7 @@ public class RecommendedController {
         Recommended recommended = BeanUtil.copyBean(updateRecommendDTO, Recommended.class);
         recommended.setTechCategoryId(updateRecommendDTO.getTid());
         service.updateRecommended(recommended);
-        return ResultGenerator.ok();
+        return ResultGenerator.ok("修改成功！");
     }
 
     @GetMapping("deleteRecommended")
@@ -384,6 +391,6 @@ public class RecommendedController {
         qService.delete(wrapper);
         //删除套题
         service.deleteRecommended(recommendedId);
-        return ResultGenerator.ok();
+        return ResultGenerator.ok("删除成功！");
     }
 }

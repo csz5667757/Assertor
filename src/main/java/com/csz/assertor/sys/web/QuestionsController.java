@@ -3,6 +3,7 @@ package com.csz.assertor.sys.web;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.csz.assertor.Exception.OPException;
 import com.csz.assertor.rest.ResultGenerator;
 import com.csz.assertor.rest.response.Response;
 import com.csz.assertor.sys.DTO.QuestionsDTO;
@@ -22,6 +23,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -91,8 +93,8 @@ public class QuestionsController {
     @PostMapping("uploadQuestions")
     @ResponseBody
     @ApiOperation("上传题目")
-    public Response uploadQuestion(@RequestBody QuestionsDTO questionsDTO){
-        System.out.println(questionsDTO);
+    @Transactional
+    public Response uploadQuestion(@RequestBody QuestionsDTO questionsDTO) throws OPException {
         Questions questions = new Questions();
         if (StringUtils.isNotBlank(questionsDTO.getAnalysisCode())){
             questions.setAnalysisCode(questionsDTO.getAnalysisCode());
@@ -153,6 +155,9 @@ public class QuestionsController {
         oService.insert(optionsD);
 
         List<Options> options = oService.selectList(new EntityWrapper<Options>());
+        if (questionsDTO.getCorrectAnswer()==null){
+            throw new OPException("正确答案未输入，请重新上传");
+        }
 
         if (questionsDTO.getCorrectAnswer()==4){
             questions2.setAnswerId(options.get(options.size()-1).getId());
@@ -166,7 +171,7 @@ public class QuestionsController {
         EntityWrapper<Questions> wrapper1 = new EntityWrapper<>();
         wrapper1.eq("id",questions2.getId());
         service.update(questions2,wrapper1);
-        return  ResultGenerator.ok();
+        return  ResultGenerator.ok("上传成功！");
     }
 
     @GetMapping("edit")
@@ -178,6 +183,9 @@ public class QuestionsController {
         EntityWrapper<Options> Owrapper = new EntityWrapper<>();
         Owrapper.eq("question_id",question.getId());
         List<Options> options = oService.selectList(Owrapper);
+        if (options.size()==0){
+            throw new OPException("该题没有选项和正确答案，不能编辑！");
+        }
         EditQuestionVO editQuestionVO = new EditQuestionVO();
         editQuestionVO.setExclusiveId(exclusive.getId());
         editQuestionVO.setCategoryGroupId(exclusive.getCategoryGroupId());
@@ -227,7 +235,8 @@ public class QuestionsController {
     @PostMapping("updateQuestions")
     @ResponseBody
     @ApiOperation("修改题目")
-    public Response updateQuestions(@RequestBody QuestionsEditDTO questionsEditDTO){
+    @Transactional
+    public Response updateQuestions(@RequestBody QuestionsEditDTO questionsEditDTO) throws OPException{
         System.out.println(questionsEditDTO);
         Questions questions = service.selectById(questionsEditDTO.getId());
         if (StringUtils.isNotBlank(questionsEditDTO.getAnalysisText())){
@@ -303,13 +312,13 @@ public class QuestionsController {
         wrapper4.eq("id",options.get(3).getId());
         oService.update(options.get(3),wrapper4);
 
-        return ResultGenerator.ok();
+        return ResultGenerator.ok("修改成功！");
     }
 
     @GetMapping("delete")
     @ResponseBody
     public Response deleteQuestionById(@RequestParam String questionId){
         service.DeleteQuestion(questionId);
-        return ResultGenerator.ok();
+        return ResultGenerator.ok("删除成功！");
     }
 }

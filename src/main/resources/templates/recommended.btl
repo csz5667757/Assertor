@@ -52,6 +52,9 @@
                             <button class="layui-btn-sm" lay-submit="" lay-filter="submit"><i
                                     class="layui-icon">&#xe615;</i></button>
                         </div>
+                         <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+                                                                                                    <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+                                                                                                </a>
                     </form>
                 </div>
 
@@ -71,12 +74,10 @@
         <div class="layui-btn-container">
             <button class="layui-btn layui-btn-sm" lay-event="add">上传套题</button>
             <button class="layui-btn layui-btn-sm" lay-event="update">修改套题</button>
-             <button class="layui-btn layui-btn-small"  onclick="location.reload()" >刷新</button>
+             <!-- <button class="layui-btn layui-btn-small"  onclick="location.reload()" >刷新</button> -->
         </div>
     </script>
     <script>
-
-
         //JavaScript代码区域
         layui.use(['table', 'layedit', 'element', 'form'], function () {
             var element = layui.element;
@@ -85,7 +86,7 @@
             var form = layui.form;
 
             form.on('submit(submit)', function(data){
-                table.reload('demo', {where: data.field});
+                table.reload('demo', {where: data.field,page:{curr:1}});
                 return false;
             });
 
@@ -125,7 +126,7 @@
                      var recommendedId = data.id;
                      xadmin.open('题目上传——'+data.title,'/sys/recommended/upload?recommendedId='+recommendedId);
                 }else if (obj.event === 'del') {
-                    layer.confirm('真的删除"' + data.title + '"么', function (index) {
+                    layer.confirm('确定删除"' + data.title + '"么？', function (index) {
                         $.ajax({
                             conentType: "json/application,charset=utf-8"
                             , url: "/sys/recommended/deleteRecommended"
@@ -136,7 +137,7 @@
                             },
                             success: function (result) {
                                 layer.alert(result.message, {title: '处理结果!'},function(){
-                                    window.parent.location.reload();
+                                    window.location.reload();
                                 });
                             }
                         })

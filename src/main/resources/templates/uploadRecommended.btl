@@ -16,14 +16,14 @@
     <div class="layui-fluid">
         <div class="layui-row">
             <div class="layui-form-item">
-                <label class="layui-form-label">套题名称:</label>
+                <label class="layui-form-label layui-required">套题名称</label>
                 <div class="layui-input-inline">
                     <input type="text" lay-verify="required" name="title" value="" class="layui-input">
                 </div>
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">偏好:</label>
+                <label class="layui-form-label layui-required">偏好</label>
                 <div class="layui-input-inline">
                     <select name="techCategoryId" lay-filter="">
                         <option value="">选择用户偏好</option>
@@ -39,7 +39,7 @@
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">难度:</label>
+                <label class="layui-form-label layui-required">难度</label>
                 <div class="layui-input-inline">
                     <select name="level" lay-filter="">
                         <option value="1">1</option>
@@ -115,5 +115,16 @@
         });
     });
 </script>
+<style>
+.layui-form-label.layui-required:after{
+        content:"*";
+        font-size:20px;
+        color:red;
+        position: float;
+        float:right;
+        top:10px;
+        left:25px;
+    }
+</style>
 </body>
 </html>
