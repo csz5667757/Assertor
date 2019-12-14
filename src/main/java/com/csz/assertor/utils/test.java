@@ -5,7 +5,7 @@ package com.csz.assertor.utils;
  * @Description
  * @Date：2019/11/26
  */
-public abstract class test {
+public  class test {
 
 //    public static final String password = "123456";
 
@@ -13,10 +13,22 @@ public abstract class test {
 
     }
 
-    public abstract void tests();
-
 //    @SuppressWarnings("static-access")
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
+
+//        List<String> Datelist = Lists.newArrayList();
+//        for (int i =6;i>-1;i--){
+//            Date date = new Date(System.currentTimeMillis()-1000*60*60*24*i);
+//            SimpleDateFormat sp = new SimpleDateFormat("MM-dd");
+//            String format = sp.format(date);
+//            Datelist.add(format);
+//        }
+
+//        Date date = new Date(System.currentTimeMillis()-1000*60*60*24);
+//        SimpleDateFormat sp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+//        String format = sp.format(date);
+//        Date date1 = sp.parse(format);
+//        java.sql.Date sqlDate =  new java.sql.Date(date1.getTime());
 //        String a = MD5Util.string2MD5(password);
 //        System.out.println(a);
 //

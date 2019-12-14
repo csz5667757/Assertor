@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.csz.assertor.sys.mapper.ExclusiveGroupMapper">
-
+    <select id="getExclusiveGroup" resultType="com.csz.assertor.sys.Vo.index.IndexPieVO">
+            select title  as 'name' ,count(q.id) as 'value'
+                from exclusive_group eg
+                LEFT JOIN `exclusive` e on e.category_group_id=eg.id
+                LEFT JOIN questions q on q.exclusive_id = e.id
+            GROUP BY eg.id
+    </select>
 </mapper>

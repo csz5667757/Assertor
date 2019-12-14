@@ -39,4 +39,11 @@
         select r.title,r.level,r.tech_category_id,t.name from recommended r left join tech_category t on r.tech_category_id = t.id
         where r.id = #{recommendedId}
     </select>
+
+    <select id="getRecommended" resultType="com.csz.assertor.sys.Vo.index.IndexPieVO">
+        SELECT name , count(r.id) as 'value'
+            FROM tech_category t
+            LEFT JOIN recommended r on t.id = r.tech_category_id
+        GROUP BY name
+    </select>
 </mapper>

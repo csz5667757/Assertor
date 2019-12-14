@@ -34,6 +34,10 @@ public class ExclusiveServiceImpl extends ServiceImpl<ExclusiveMapper, Exclusive
     @Override
     public List<ExclusiveVO> selectExclusive() {
         List<ExclusiveVO> exclusiveVOList = eMapper.selectExclusive();
+        for(int n = 0;n<exclusiveVOList.size(); n++){
+            ExclusiveVO exclusiveVO = exclusiveVOList.get(n);
+            exclusiveVO.setId(exclusiveVO.getId()+1000);
+        }
         List<ExclusiveGroup> exclusiveGroupList = egMapper.selectList(new EntityWrapper<>());
         for(int i = 0; i<exclusiveGroupList.size();i++){
             ExclusiveVO exclusiveVO = BeanUtil.copyBean(exclusiveGroupList.get(i), ExclusiveVO.class);

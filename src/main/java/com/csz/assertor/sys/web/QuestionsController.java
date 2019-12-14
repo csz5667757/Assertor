@@ -40,7 +40,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/sys/questions")
-@Api(tags = "题库模块")
+@Api(tags = "专项题库模块")
 public class QuestionsController {
 
     @Autowired
@@ -175,7 +175,7 @@ public class QuestionsController {
     }
 
     @GetMapping("edit")
-    @ApiOperation("返回题目修改视图")
+    @ApiOperation("返回专项题目修改视图")
     public String edit(@RequestParam Integer id, HttpServletRequest request){
         Questions question = service.selectById(id);
         Exclusive exclusive = eService.selectById(question.getExclusiveId());
@@ -234,7 +234,7 @@ public class QuestionsController {
 
     @PostMapping("updateQuestions")
     @ResponseBody
-    @ApiOperation("修改题目")
+    @ApiOperation("修改专项题目")
     @Transactional
     public Response updateQuestions(@RequestBody QuestionsEditDTO questionsEditDTO) throws OPException{
         System.out.println(questionsEditDTO);
@@ -316,6 +316,7 @@ public class QuestionsController {
     }
 
     @GetMapping("delete")
+    @ApiOperation("删除专项题目")
     @ResponseBody
     public Response deleteQuestionById(@RequestParam String questionId){
         service.DeleteQuestion(questionId);

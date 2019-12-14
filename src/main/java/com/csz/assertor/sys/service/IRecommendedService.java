@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.service.IService;
 import com.csz.assertor.sys.DTO.RecommendedDTO;
 import com.csz.assertor.sys.Vo.RecommendedVO;
 import com.csz.assertor.sys.Vo.UpdateReommendedVO;
+import com.csz.assertor.sys.Vo.index.IndexPieVO;
 import com.csz.assertor.sys.entity.Recommended;
+
+import java.util.List;
 
 /**
  * <p>
@@ -21,4 +24,5 @@ public interface IRecommendedService extends IService<Recommended> {
     void updateRecommended(Recommended recommended);
     void deleteRecommended(Integer recommendedId);
     UpdateReommendedVO getOne(Integer recommendedId);
+    List<IndexPieVO> getRecommended();
 }

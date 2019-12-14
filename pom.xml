@@ -5,8 +5,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.csz.assertor</groupId>
 	<artifactId>assertor</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>assertor</name>
+	<version>1.0</version>
+	<name>matou</name>
 	<description>Assertor for Spring Boot</description>
 	<packaging>jar</packaging>
 

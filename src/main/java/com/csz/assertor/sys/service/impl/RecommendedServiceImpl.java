@@ -6,12 +6,15 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.csz.assertor.sys.DTO.RecommendedDTO;
 import com.csz.assertor.sys.Vo.RecommendedVO;
 import com.csz.assertor.sys.Vo.UpdateReommendedVO;
+import com.csz.assertor.sys.Vo.index.IndexPieVO;
 import com.csz.assertor.sys.entity.Recommended;
 import com.csz.assertor.sys.mapper.RecommendedMapper;
 import com.csz.assertor.sys.service.IRecommendedService;
 import com.csz.assertor.utils.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -54,5 +57,11 @@ public class RecommendedServiceImpl extends ServiceImpl<RecommendedMapper, Recom
     @Override
     public UpdateReommendedVO getOne(Integer recommendedId) {
         return mapper.getOne(recommendedId);
+    }
+
+    //我的桌面套题数据加载
+    @Override
+    public List<IndexPieVO> getRecommended() {
+        return mapper.getRecommended();
     }
 }

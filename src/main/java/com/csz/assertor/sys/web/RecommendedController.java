@@ -22,12 +22,14 @@ import com.csz.assertor.sys.service.IQuestionsService;
 import com.csz.assertor.sys.service.IRecommendedService;
 import com.csz.assertor.sys.service.ITechCategoryService;
 import com.csz.assertor.utils.BeanUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -43,6 +45,7 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/sys/recommended")
+@Api(tags ="套题模块")
 public class RecommendedController {
 
     @Autowired
@@ -57,6 +60,7 @@ public class RecommendedController {
     @Autowired
     private IOptionsService oService;
 
+    @ApiOperation("返回套题视图")
     @GetMapping("page")
     public String recommenden(HttpServletRequest request){
         List<TechCategory> techCategories = tcService.selectList(new EntityWrapper<>());
@@ -77,6 +81,7 @@ public class RecommendedController {
      * 查看套题题目信息
      */
     @GetMapping("select")
+    @ApiOperation("套题表格数据加载")
     @ResponseBody
     public Response select(@RequestParam(required = false) Integer techCategoryId,
                            @RequestParam(required = false) Integer level,@RequestParam Integer current,@RequestParam Integer size){
@@ -85,6 +90,7 @@ public class RecommendedController {
     }
 
     @GetMapping("selectList")
+    @ApiIgnore
     @ResponseBody
     public Response selectList(@RequestParam Integer recommendedId){
         EntityWrapper<Questions> wrapper = new EntityWrapper<>();
@@ -110,7 +116,7 @@ public class RecommendedController {
     }
 
     @GetMapping("upload")
-    @ApiOperation("返回题目上传套题题目视图")
+    @ApiOperation("返回上传套题题目视图")
     public String upload(@RequestParam Integer recommendedId , HttpServletRequest request){
         request.setAttribute("recommendedId",recommendedId);
         return "addRecommendedQuestions.btl";
@@ -347,6 +353,7 @@ public class RecommendedController {
     }
 
     @GetMapping("update")
+    @ApiIgnore
     @ResponseBody
     public Response update(@RequestBody Recommended recommended) throws OPException{
         service.updateRecommended(recommended);
@@ -375,6 +382,7 @@ public class RecommendedController {
     }
 
     @GetMapping("deleteRecommended")
+    @ApiOperation("删除套题以及题目")
     @ResponseBody
     public Response deleteRecommended(@RequestParam Integer recommendedId) throws OPException{
         EntityWrapper<Questions> wrapper = new EntityWrapper<>();

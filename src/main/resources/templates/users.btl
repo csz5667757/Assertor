@@ -48,7 +48,7 @@
             }
             , page: true //开启分页
             , cols: [[ //表头
-                {field: 'openid', title: 'openid', width: 200, sort: true}
+                {field: 'openid', title: 'openid', minWidth: 200, sort: true}
                 , {field: 'name', title: '喜好类型', width: 400}
                 , {field: 'isSkip', title: '是否跳过', width: 300}
             ]]
@@ -57,9 +57,9 @@
                 //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
                 $("[data-field='isSkip']").children().each(function () {
                     if ($(this).text() == '0') {
-                        $(this).text("是")
-                    } else if ($(this).text() == '1') {
                         $(this).text("否")
+                    } else if ($(this).text() == '1') {
+                        $(this).text("是")
                     }
                 });
             }

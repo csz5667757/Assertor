@@ -7,12 +7,12 @@ import com.csz.assertor.rest.response.Response;
 import com.csz.assertor.sys.entity.OperatUser;
 import com.csz.assertor.sys.service.IOperatUserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -30,13 +30,14 @@ import java.io.IOException;
  */
 
 @Controller
-@Api("运营用户管理")
+@Api(tags = "运营用户管理")
 public class OperatUserController {
     @Autowired
     private IOperatUserService service;
 
 
     @PostMapping("/register")
+    @ApiOperation("注册功能")
     @ResponseBody
     public Response registe(@RequestParam String userName, @RequestParam String password,
                             @RequestParam String verifyPassword, HttpServletResponse response) throws IOException {
@@ -66,7 +67,8 @@ public class OperatUserController {
         }
     }
 
-    @PostMapping("/login")
+    @PostMapping("/index")
+    @ApiOperation("登陆功能")
     public String login(@RequestParam String username, @RequestParam String password
                       , HttpServletRequest request , HttpServletResponse response
     ) throws IOException {
@@ -80,6 +82,4 @@ public class OperatUserController {
         request.setAttribute("nickname",user.getNickname());
         return "indexs.btl";
     }
-
-
 }

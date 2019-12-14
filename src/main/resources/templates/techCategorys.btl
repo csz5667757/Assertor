@@ -18,7 +18,8 @@
     <![endif]-->
 </head>
 <body>
-<table id="demo" lay-filter="demo"></table>
+
+<table id="demo" class="layui-table" lay-filter="demo"></table>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -54,13 +55,14 @@
             , page: true //开启分页
             , cols: [[ //表头
                 {field: 'id', title: '序号', width: 200, sort: true}
-                , {field: 'name', title: '类型', minWidth: 400}
-                , {fixed: 'right', width: 300, align: 'center', toolbar: '#barDemo'}
+                , {type: 'numbers', width: '8%'}
+                , {field: 'name', title: '类型', width: '60%'}
+                , {fixed: 'right', width: '32%', align: 'left', toolbar: '#barDemo'}
             ]]
-             ,done: function (res, curr, count) {
-                                 $(".layui-table-box").find("[data-field='id']").css("display","none");
+            , done: function (res, curr, count) {
+                $(".layui-table-box").find("[data-field='id']").css("display", "none");
 
-                        }
+            }
         });
 
 
@@ -118,7 +120,7 @@
                         title: "添加类目"
                         , btnAlign: 'c' //按钮居中
                         , shade: 0//不显示遮罩
-                        , btn:null
+                        , btn: null
                         , area: '500px;'
                         , content: "<form class='layui-form' action='/sys/tech/add' method='post'>" +
                             "<div class='layui-form-item'>" +
@@ -127,13 +129,14 @@
 
                             "<button class='layui-btn layui-btn-primary'  type='submit' style='margin-top: 10px;: 20px; margin-left:200px'>提交</button>" +
                             "</form>"
-                        ,yes: function () {
+                        , yes: function () {
                             parent.layui.closeAll();
                             parent.layui.table.reload('demo');//重载父页表格，参数为表格ID
                         }
                     })
                     break;
-            };
+            }
+            ;
         });
 
         //触发事件
@@ -165,7 +168,5 @@
         });
     });
 </script>
-
-
 </body>
 </html>

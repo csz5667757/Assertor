@@ -34,18 +34,6 @@ public class ViewController {
         return "register.btl";
     }
 
-    @GetMapping("user")
-    public String user(@RequestParam String nickname,HttpServletRequest request){
-        request.setAttribute("nickname",nickname);
-        return "user.btl";
-    }
-
-    @GetMapping("category")
-    public String techCategory(@RequestParam String nickname,HttpServletRequest request){
-        request.setAttribute("nickname",nickname);
-        return "techCategory.btl";
-    }
-
     @GetMapping("/login")
     public String logins(){
         return "logins.btl";
