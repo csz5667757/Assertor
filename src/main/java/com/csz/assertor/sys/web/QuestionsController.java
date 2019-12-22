@@ -59,8 +59,10 @@ public class QuestionsController {
     @ResponseBody
     @ApiOperation("题库信息查询")
     public Response selectQuestions(@RequestParam(required = false) String categoryGroupId,
-                                    @RequestParam(required = false) String exclusiveId ,@RequestParam Integer current,@RequestParam Integer size){
-        Page<QuestionVO> voList = service.SelectQuestions(categoryGroupId, exclusiveId,new Page<>(current,size));
+                                    @RequestParam(required = false) String exclusiveId ,
+                                    @RequestParam(required = false) String description,
+                                    @RequestParam Integer current,@RequestParam Integer size){
+        Page<QuestionVO> voList = service.SelectQuestions(categoryGroupId, exclusiveId,description,new Page<>(current,size));
         return ResultGenerator.table(voList);
     }
 
@@ -239,25 +241,13 @@ public class QuestionsController {
     public Response updateQuestions(@RequestBody QuestionsEditDTO questionsEditDTO) throws OPException{
         System.out.println(questionsEditDTO);
         Questions questions = service.selectById(questionsEditDTO.getId());
-        if (StringUtils.isNotBlank(questionsEditDTO.getAnalysisText())){
             questions.setAnalysisText(questionsEditDTO.getAnalysisText());
-        }
-        if (StringUtils.isNotBlank(questionsEditDTO.getCorrectAnswer().toString())){
             questions.setAnswerId(questionsEditDTO.getCorrectAnswer());
-        }
-        questions.setExclusiveId(questionsEditDTO.getExclusiveId());
-        if (StringUtils.isNotBlank(questionsEditDTO.getDescription())){
             questions.setDescription(questionsEditDTO.getDescription());
-        }
 
         //富文本
-        if (StringUtils.isNotBlank(questionsEditDTO.getAnalysisCode())){
             questions.setAnalysisCode(questionsEditDTO.getAnalysisCode());
-        }
-
-        if (StringUtils.isNotBlank(questionsEditDTO.getDescriptionCode())){
             questions.setCode(questionsEditDTO.getDescriptionCode());
-        }
 
         EntityWrapper<Questions> questionsEntityWrapper = new EntityWrapper<>();
         questionsEntityWrapper.eq("id",questions.getId());
@@ -267,34 +257,15 @@ public class QuestionsController {
         EntityWrapper<Options> wrapper = new EntityWrapper<>();
         wrapper.eq("question_id",questionsEditDTO.getId());
         List<Options> options = oService.selectList(wrapper);
-        if (StringUtils.isNotBlank(questionsEditDTO.getOptionA())){
             options.get(0).setOptionText(questionsEditDTO.getOptionA());
-        }
-        if (StringUtils.isNotBlank(questionsEditDTO.getOptionB())){
             options.get(1).setOptionText(questionsEditDTO.getOptionB());
-        }
-        if (StringUtils.isNotBlank(questionsEditDTO.getOptionC())){
             options.get(2).setOptionText(questionsEditDTO.getOptionC());
-
-        }
-        if (StringUtils.isNotBlank(questionsEditDTO.getOptionD())){
             options.get(3).setOptionText(questionsEditDTO.getOptionD());
-        }
-
         //富文本
-        if (StringUtils.isNotBlank(questionsEditDTO.getOptionACode())){
             options.get(0).setOptionCode(questionsEditDTO.getOptionACode());
-        }
-        if (StringUtils.isNotBlank(questionsEditDTO.getOptionB())){
             options.get(1).setOptionCode(questionsEditDTO.getOptionBCode());
-        }
-        if (StringUtils.isNotBlank(questionsEditDTO.getOptionC())){
             options.get(2).setOptionCode(questionsEditDTO.getOptionCCode());
-
-        }
-        if (StringUtils.isNotBlank(questionsEditDTO.getOptionD())){
             options.get(3).setOptionCode(questionsEditDTO.getOptionDCode());
-        }
 
         EntityWrapper<Options> wrapper1 = new EntityWrapper<>();
         wrapper1.eq("id",options.get(0).getId());

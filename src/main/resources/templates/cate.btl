@@ -68,8 +68,9 @@
             url: 'sys/exclusive/select',
             cols: [[
                 {type: 'numbers', width: '8%'},
-                {field: 'title', title: '类目', width: '60%'},
-                {templet: '#oper-col', title: '操作', width: '32%'}
+                {field: 'title', title: '类目', width: '50%'},
+                {field: 'count', title: '题目数',width:'17%'},
+                {templet: '#oper-col', title: '操作', width: '25%'}
             ]]
         });
 
@@ -81,7 +82,7 @@
             if (layEvent === 'del') {
                 layer.msg('删除' + data.id);
             } else if (layEvent === 'edit') {
-                layer.msg('修改' + data.id);
+                xadmin.open("编辑专项","/sys/exclusive/edit?id="+data.id+"&title="+data.title+"&pid="+data.pid,800,500)
             }
         });
 
@@ -90,7 +91,10 @@
             var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
             switch (obj.event) {
                 case 'add':
-                    layer.msg("add");
+                    xadmin.open("添加专项","/sys/exclusive/add",800,500);
+                    break;
+                case 'moves':
+                    xadmin.open("移动专项","/sys/exclusive/move",800,500);
                     break;
                 case 'expand':
                     treetable.expandAll('#table1');

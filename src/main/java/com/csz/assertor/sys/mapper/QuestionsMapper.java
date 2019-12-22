@@ -18,5 +18,8 @@ import java.util.List;
  */
 public interface QuestionsMapper extends BaseMapper<Questions> {
     List<QuestionVO> selectQuestions(@Param("categoryGroupId") String categoryGroupId,
-                                     @Param("exclusiveId") String exclusiveId, Page page);
+                                     @Param("exclusiveId") String exclusiveId,
+                                     @Param("descriptions") String description, Page page);
+
+    Integer selectExclusiveGroup(@Param("exclusiveGroupId") Integer exclusiveGroupId);
 }

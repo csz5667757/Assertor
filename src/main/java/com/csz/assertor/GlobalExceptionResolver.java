@@ -49,6 +49,14 @@ public class GlobalExceptionResolver implements HandlerExceptionResolver {
             int code = ((OPException)ex).getCode();
             entity = ResultGenerator.failure(code,ex.getMessage());
             logger.info(ex.getMessage());
+
+            //返回错误信息
+            request.setAttribute("errors",ex.getMessage());
+            try {
+                response.sendRedirect("login?error=1");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         //请求了不存在的接口
         else if(ex instanceof NoHandlerFoundException){

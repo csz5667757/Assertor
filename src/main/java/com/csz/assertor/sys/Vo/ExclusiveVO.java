@@ -13,4 +13,5 @@ public class ExclusiveVO {
     private Integer id;
     private String title;
     private Integer pid;
+    private Integer count;
 }

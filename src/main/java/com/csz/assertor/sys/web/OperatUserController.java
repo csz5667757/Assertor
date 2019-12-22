@@ -6,6 +6,7 @@ import com.csz.assertor.rest.ResultGenerator;
 import com.csz.assertor.rest.response.Response;
 import com.csz.assertor.sys.entity.OperatUser;
 import com.csz.assertor.sys.service.IOperatUserService;
+import com.csz.assertor.utils.HttpClientPostFs;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -69,17 +71,20 @@ public class OperatUserController {
 
     @PostMapping("/index")
     @ApiOperation("登陆功能")
-    public String login(@RequestParam String username, @RequestParam String password
-                      , HttpServletRequest request , HttpServletResponse response
-    ) throws IOException {
+    public void login(@RequestParam String username, @RequestParam String password
+                      , HttpServletRequest request , HttpServletResponse response) throws ServletException, IOException {
         OperatUser user = service.selectByUserName(username);
+        if (user==null){throw new OPException("用户名或密码错误！");}
         String salt = user.getSalt();
+        System.out.println(DigestUtils.md5DigestAsHex((password + salt).getBytes()));
         if (!DigestUtils.md5DigestAsHex((password + salt).getBytes()).equals(user.getPassword())) {
             throw new OPException("用户名或密码错误！");
         }else{
             request.getSession().setAttribute("logined","success");
         }
-        request.setAttribute("nickname",user.getNickname());
-        return "indexs.btl";
+//        request.getRequestDispatcher("/indexs").forward(request,response);
+        HttpClientPostFs http = new HttpClientPostFs(response);
+        http.setParameter("nickname",user.getNickname());
+        http.sendByPost("/indexs");
     }
 }

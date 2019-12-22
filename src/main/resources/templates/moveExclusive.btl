@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../static/css/font.css">
+    <link rel="stylesheet" href="../../static/css/xadmin.css">
+    <script src="../../static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../static/js/xadmin.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<form class="layui-form">
+    <div class="layui-fluid">
+        <div class="layui-row">
+            <div class="layui-form-item">
+                <label class="layui-form-label layui-required">专项名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" lay-verify="required" name="title" value="" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">父类专项</label>
+                <div class="layui-input-inline">
+                    <select name="id" lay-filter="">
+                        <option value="">选择父类专项</option>
+                        <%
+                        for(eg in egList){
+                        %>
+                        <option value="${eg.id}">${eg.title}</option>
+                        <%
+                        }
+                        %>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="submit">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form, laydate = layui.laydate, layedit = layui.layedit;
+
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //自定义验证规则
+        form.verify({
+            title: function (value) {
+                if (value.length < 5) {
+                    return '标题至少得5个字符啊';
+                }
+            }
+            , pass: [
+                /^[\S]{6,12}$/
+                , '密码必须6到12位，且不能出现空格'
+            ]
+            , content: function (value) {
+                layedit.sync(editIndex);
+            }
+        });
+
+        // 监听提交
+        form.on('submit(submit)', function (data) {
+            // layer.alert(JSON.stringify(data.field), {
+            //   title: '最终的提交信息'
+            //});
+            layer.confirm('确定提交?', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: "/sys/exclusive/addExclusive",
+                    contentType:"application/json",
+                    dataType:"JSON",
+                    data: JSON.stringify(data.field),
+                    success: function (result) {
+                        console.log(result);
+                        layer.alert(result.message, {title: '处理结果!'},
+                            function(){
+                                window.parent.location.reload();
+                            });
+                    }
+                });
+                layer.close(index);
+            });
+            return false;
+        });
+    });
+</script>
+<style>
+.layui-form-label.layui-required:after{
+        content:"*";
+        font-size:20px;
+        color:red;
+        position: float;
+        float:right;
+        top:10px;
+        left:25px;
+    }
+</style>
+</body>
+</html>

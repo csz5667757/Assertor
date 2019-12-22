@@ -1,31 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.csz.assertor.sys.mapper.QuestionsMapper">
-	<resultMap id="QuestionVO" type="com.csz.assertor.sys.Vo.QuestionVO" >
-		<result column="id" property="id" jdbcType="INTEGER" />
-		<result column="description" property="description" jdbcType="VARCHAR" />
-		<result column="title" property="title" jdbcType="VARCHAR" />
-		<result column="exclusive_title" property="exclusiveTitle" jdbcType="VARCHAR" />
-		<result column="option_code" property="optionCode" jdbcType="VARCHAR" />
-		<result column="option_text" property="optionText" jdbcType="VARCHAR" />
-	</resultMap>
+    <resultMap id="QuestionVO" type="com.csz.assertor.sys.Vo.QuestionVO">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="exclusive_title" property="exclusiveTitle" jdbcType="VARCHAR"/>
+        <result column="option_code" property="optionCode" jdbcType="VARCHAR"/>
+        <result column="option_text" property="optionText" jdbcType="VARCHAR"/>
+    </resultMap>
 
-    <select id="selectQuestions"  resultMap="QuestionVO">
-		SELECT
-		q.id ,
-		q.description ,
-		eg.title  ,
-		e.exclusive_title
-		FROM
-		questions q
-		LEFT JOIN `exclusive` e ON q.exclusive_id = e.id
-		LEFT JOIN exclusive_group eg ON e.category_group_id = eg.id
-		WHERE q.exclusive_id > 0
-		<if test="categoryGroupId != null and categoryGroupId !='' ">
-			AND e.category_group_id = #{categoryGroupId}
-		</if>
-		<if test="exclusiveId!=null and exclusiveId!=''">
-		AND e.id = #{exclusiveId}
-	</if>
+    <select id="selectQuestions" resultMap="QuestionVO">
+        SELECT
+        q.id ,
+        q.description ,
+        eg.title ,
+        e.exclusive_title
+        FROM
+        questions q
+        LEFT JOIN `exclusive` e ON q.exclusive_id = e.id
+        LEFT JOIN exclusive_group eg ON e.category_group_id = eg.id
+        WHERE q.exclusive_id > 0
+        <if test="categoryGroupId != null and categoryGroupId !='' ">
+            AND e.category_group_id = #{categoryGroupId}
+        </if>
+        <if test="exclusiveId!=null and exclusiveId!=''">
+            AND e.id = #{exclusiveId}
+        </if>
+        <if test="descriptions!=null and descriptions != ''">
+            AND q.description like  "%${descriptions}%" OR q.code like  "%${descriptions}%"
+        </if>
     </select>
+
+    <select id="selectExclusiveGroup" parameterType="INTEGER" resultType="INTEGER">
+			select count(*) as 'count'  from questions q
+			LEFT JOIN `exclusive` e on q.exclusive_id =e.id
+			LEFT JOIN exclusive_group eg on e.category_group_id = eg.id
+			where eg.id  = #{exclusiveGroupId}
+	</select>
 </mapper>

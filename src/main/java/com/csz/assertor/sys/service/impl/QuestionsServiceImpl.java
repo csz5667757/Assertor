@@ -34,8 +34,8 @@ public class QuestionsServiceImpl extends ServiceImpl<QuestionsMapper, Questions
     private OptionsMapper oMapper;
 
     @Override
-    public Page<QuestionVO> SelectQuestions(String categoryGroupId, String exclusiveId, Page<QuestionVO> page) {
-        return page.setRecords(this.baseMapper.selectQuestions(categoryGroupId,exclusiveId,page));
+    public Page<QuestionVO> SelectQuestions(String categoryGroupId, String exclusiveId, String description,Page<QuestionVO> page) {
+        return page.setRecords(this.baseMapper.selectQuestions(categoryGroupId,exclusiveId,description,page));
     }
 
     @Override

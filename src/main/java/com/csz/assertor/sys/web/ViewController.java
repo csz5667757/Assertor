@@ -3,11 +3,9 @@ package com.csz.assertor.sys.web;
 import com.csz.assertor.rest.ResultGenerator;
 import com.csz.assertor.rest.response.Response;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,16 +33,19 @@ public class ViewController {
     }
 
     @GetMapping("/login")
-    public String logins(){
+    public String logins(HttpServletRequest request,@RequestParam(required = false) String error){
+        if (StringUtils.isNotBlank(error)) {
+            request.setAttribute("errors","用户名或密码错误！");
+        }else {request.setAttribute("errors",1);}
         return "logins.btl";
     }
 
-    @GetMapping("indexs")
-    public String indexs(@RequestParam String nickname,HttpServletRequest request){
+    @PostMapping("indexs")
+    public String index(@RequestParam String nickname,HttpServletRequest request){
         request.setAttribute("nickname",nickname);
         return "indexs.btl";
     }
-
+    
     @GetMapping("users")
     public String users(){
         return "users.btl";
@@ -56,10 +57,10 @@ public class ViewController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         session.setAttribute("logined","logout");
-        return "logins.btl";
+        response.sendRedirect("/login");
     }
 
     @GetMapping("/exclusive")

@@ -27,8 +27,6 @@
                         }
                         %>
                     </select>
-
-
                 </div>
 
                 <label class="layui-form-label layui-required">二级专项</label>
@@ -44,7 +42,7 @@
                 <label class="layui-form-label">题目描述</label>
                 <div class="layui-input-block">
                     <input name="description" id = "description" value="${question.description}"  placeholder="请输入题目" class="layui-input"></input>
-                    <textarea name="descriptionCode" id = "descriptionCode"   placeholder="请输入题目" class="layui-textarea">${question.descriptionCode}</textarea>
+                    <textarea name="descriptionCode" id = "descriptionCode" placeholder="请输入题目" class="layui-textarea">${question.descriptionCode}</textarea>
                 </div>
             </div>
 
@@ -183,6 +181,11 @@
         // 监听提交
         form.on('submit(submit)', function (data) {
             data.field.analysisCode=layedit.getContent(editIndex);
+            data.field.optionACode=layedit.getContent(editIndex1);
+            data.field.optionBCode=layedit.getContent(editIndex2);
+            data.field.optionCCode=layedit.getContent(editIndex3);
+            data.field.optionDCode=layedit.getContent(editIndex4);
+            data.field.descriptionCode=layedit.getContent(editIndex5);
             data.field.id = ${id};
             //layer.alert(JSON.stringify(data.field), {
             //                 title: '最终的提交信息'
