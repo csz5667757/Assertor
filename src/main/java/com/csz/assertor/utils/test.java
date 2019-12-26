@@ -13,8 +13,24 @@ public  class test {
 
     }
 
-//    @SuppressWarnings("static-access")
+
+
+    //    @SuppressWarnings("static-access")
     public static void main(String[] args) throws Exception{
+
+
+        Integer a1 = 127;
+        Integer i1 = new Integer(127);
+        System.out.println(a1.equals(i1));
+        Integer.valueOf("1");
+
+        Integer a2 = 133;
+        Integer i2 = 133;
+        System.out.println(i2 == a2);
+
+
+
+
 
 //        List<String> Datelist = Lists.newArrayList();
 //        for (int i =6;i>-1;i--){

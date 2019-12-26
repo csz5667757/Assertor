@@ -8,6 +8,7 @@ import com.csz.assertor.sys.Vo.RecommendedVO;
 import com.csz.assertor.sys.Vo.UpdateReommendedVO;
 import com.csz.assertor.sys.Vo.index.IndexPieVO;
 import com.csz.assertor.sys.entity.Recommended;
+import com.csz.assertor.sys.mapper.QuestionsMapper;
 import com.csz.assertor.sys.mapper.RecommendedMapper;
 import com.csz.assertor.sys.service.IRecommendedService;
 import com.csz.assertor.utils.BeanUtil;
@@ -29,6 +30,9 @@ public class RecommendedServiceImpl extends ServiceImpl<RecommendedMapper, Recom
 
     @Autowired
     private RecommendedMapper mapper;
+
+    @Autowired
+    private QuestionsMapper qMapper;
 
     @Override
     public Page<RecommendedVO> SelectRecommendeds(Integer techCategoryId, Integer level, Page<RecommendedVO> page) {
@@ -63,5 +67,10 @@ public class RecommendedServiceImpl extends ServiceImpl<RecommendedMapper, Recom
     @Override
     public List<IndexPieVO> getRecommended() {
         return mapper.getRecommended();
+    }
+
+    @Override
+    public void deleteRecommendedQuestions(Integer questionId) {
+        qMapper.deleteById(questionId);
     }
 }

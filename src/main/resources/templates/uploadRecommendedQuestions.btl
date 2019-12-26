@@ -108,7 +108,13 @@
                     <button class="layui-btn" lay-submit="" lay-filter="nextQuestion">修改跳转</button>
                     <button class="layui-btn  layui-btn-normal" lay-submit="" lay-filter="before">上一题</button>
                     <button class="layui-btn  layui-btn-normal" lay-submit="" lay-filter="next">下一题</button>
-                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    <button class="layui-btn  layui-btn-danger" lay-submit="" lay-filter="delete">删除</button>
+                    <div style="float:right">
+                    <div class="layui-inline" style="width: 60px; margin-top:5px">
+                        <input  type="text" name = "page" class="layui-input" style="width:60px"  placeholder="第n页"></input>
+                    </div>
+                    <button class="layui-btn" lay-submit="" lay-filter="pages">确定</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -117,6 +123,7 @@
 
 <script>
     flag = 0;
+
     layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form, layer = layui.layer, laydate = layui.laydate, layedit = layui.layedit;
 
@@ -135,6 +142,7 @@
             elem: '#date1'
         });
 
+
         //自定义验证规则
         form.verify({
             title: function (value) {
@@ -142,6 +150,7 @@
                     return '标题至少得5个字符啊';
                 }
             }
+            ,page:[/^[1-9]\d*$/,'请输入数字']
             , pass: [
                 /^[\S]{6,12}$/
                 , '密码必须6到12位，且不能出现空格'
@@ -251,7 +260,44 @@
             return false;
         });
 
-    });
+        form.on('submit(pages)', function (data) {
+                    var page = data.field.page;
+                    var regexp=/^[1-9]\d*$/;
+                    if(!(regexp.test(page))){
+                        layer.msg("请输入正确的页数！");
+                    }else if (page > ${questionNum}) {
+                        layer.msg('超出最大题目数！');
+                    } else {
+                        window.location.replace('/sys/recommended/edit?id=' +${recommendedId} +'&questionNum=' +${questionNum} +'&index=' + page);
+                    }
+                    return false;
+                });
+
+
+                form.on('submit(delete)', function (data) {
+                                         layer.confirm('确定删除当前题目么？', function (index) {
+                                             $.ajax({
+                                                 conentType: "json/application,charset=utf-8"
+                                                 , url: "/sys/recommended/deleteRecommendedQuestion"
+                                                 , dataType: "json"
+                                                 , type: "GET"
+                                                 , data: {
+                                                     questionId: ${question.questionId}
+                                                 },
+                                                 success: function (result) {
+                                                     layer.alert(result.message, {title: '处理结果!'},function(){
+                                                         parent.location.reload();
+                                                     });
+                                                 }
+                                             })
+
+                                         });
+                                             return false;
+                                  });
+
+         });
+
+
 </script>
 <style>
 .layui-form-label.layui-required:after{

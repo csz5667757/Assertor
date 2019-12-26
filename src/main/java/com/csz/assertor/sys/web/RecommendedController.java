@@ -277,23 +277,23 @@ public class RecommendedController {
     public Response updateQuestions(@RequestBody RecommendedQuestionsEditDTO recommendedQuestionsEditDTO) throws OPException{
         Questions questions = qService.selectById(recommendedQuestionsEditDTO.getId());
         System.out.println(questions);
-        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getAnalysisText())){
+//        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getAnalysisText())){
             questions.setAnalysisText(recommendedQuestionsEditDTO.getAnalysisText());
-        }
-        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getCorrectAnswer().toString())){
+//        }
+//        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getCorrectAnswer().toString())){
             questions.setAnswerId(recommendedQuestionsEditDTO.getCorrectAnswer());
-        }
-        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getDescription())){
+//        }
+//        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getDescription())){
             questions.setDescription(recommendedQuestionsEditDTO.getDescription());
-        }
+//        }
         //富文本
-        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getAnalysisCode())){
+//        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getAnalysisCode())){
             questions.setAnalysisCode(recommendedQuestionsEditDTO.getAnalysisCode());
-        }
+//        }
 
-        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getDescriptionCode())){
+//        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getDescriptionCode())){
             questions.setCode(recommendedQuestionsEditDTO.getDescriptionCode());
-        }
+//        }
 
         EntityWrapper<Questions> questionsEntityWrapper = new EntityWrapper<>();
         questionsEntityWrapper.eq("id",questions.getId());
@@ -303,34 +303,34 @@ public class RecommendedController {
         EntityWrapper<Options> wrapper = new EntityWrapper<>();
         wrapper.eq("question_id",recommendedQuestionsEditDTO.getId());
         List<Options> options = oService.selectList(wrapper);
-        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionA())){
+//        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionA())){
             options.get(0).setOptionText(recommendedQuestionsEditDTO.getOptionA());
-        }
-        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionB())){
+//        }
+//        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionB())){
             options.get(1).setOptionText(recommendedQuestionsEditDTO.getOptionB());
-        }
-        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionC())){
+//        }
+//        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionC())){
             options.get(2).setOptionText(recommendedQuestionsEditDTO.getOptionC());
 
-        }
-        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionD())){
+//        }
+//        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionD())){
             options.get(3).setOptionText(recommendedQuestionsEditDTO.getOptionD());
-        }
+//        }
 
         //富文本
-        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionACode())){
+//        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionACode())){
             options.get(0).setOptionCode(recommendedQuestionsEditDTO.getOptionACode());
-        }
-        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionB())){
+//        }
+//        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionB())){
             options.get(1).setOptionCode(recommendedQuestionsEditDTO.getOptionBCode());
-        }
-        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionC())){
+//        }
+//        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionC())){
             options.get(2).setOptionCode(recommendedQuestionsEditDTO.getOptionCCode());
 
-        }
-        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionD())){
+//        }
+//        if (StringUtils.isNotBlank(recommendedQuestionsEditDTO.getOptionD())){
             options.get(3).setOptionCode(recommendedQuestionsEditDTO.getOptionDCode());
-        }
+//        }
 
 
         EntityWrapper<Options> wrapper1 = new EntityWrapper<>();
@@ -401,4 +401,13 @@ public class RecommendedController {
         service.deleteRecommended(recommendedId);
         return ResultGenerator.ok("删除成功！");
     }
+
+    @GetMapping("deleteRecommendedQuestion")
+    @ApiOperation("删除套题题目")
+    @ResponseBody
+    public Response deleteRecommendedQuestion(@RequestParam Integer questionId){
+        service.deleteRecommendedQuestions(questionId);
+        return ResultGenerator.ok("删除成功！");
+    }
+
 }

@@ -25,4 +25,5 @@ public interface IRecommendedService extends IService<Recommended> {
     void deleteRecommended(Integer recommendedId);
     UpdateReommendedVO getOne(Integer recommendedId);
     List<IndexPieVO> getRecommended();
+    void deleteRecommendedQuestions(Integer questionId);
 }

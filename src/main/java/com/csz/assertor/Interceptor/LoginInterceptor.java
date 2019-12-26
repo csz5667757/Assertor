@@ -24,17 +24,18 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         HttpSession session = request.getSession();
-        Object logined = session.getAttribute("logined");
-        if (logined =="success"){
+        String logined = (String) session.getAttribute("logined");
+        if (logined.equals("success")){
             System.out.println("1111111111111111111111111111111");
             logger.debug("用户已登陆，用户状态为"+session.getAttribute("logined"));
-            return true;
+
         }else {
             System.out.println("0000000000000000");
             logger.debug("用户未登录！");
             response.sendRedirect("/login");
-            return false;
+
         }
+        return true;
 
     }
 
